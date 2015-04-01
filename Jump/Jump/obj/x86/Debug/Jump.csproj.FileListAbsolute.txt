@@ -1,8 +1,0 @@
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\bin\x86\Debug\Jump.exe
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\bin\x86\Debug\Jump.pdb
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\obj\x86\Debug\Jump.csprojResolveAssemblyReference.cache
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\obj\x86\Debug\Jump.exe
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\obj\x86\Debug\Jump.pdb
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\bin\x86\Debug\Content\Player.xnb
-C:\Users\chris.stroud\Documents\Visual Studio 2013\Projects\Jump\Jump\Jump\bin\x86\Debug\Content\Chunk.xnb

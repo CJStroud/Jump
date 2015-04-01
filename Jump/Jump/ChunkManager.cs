@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
+﻿using Jump.Chunks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
+using System;
+using System.Collections.Generic;
 
 namespace Jump
 {
@@ -16,7 +14,7 @@ namespace Jump
 
         private int _screenWidth;
         private int _nextPostionX;
-        private int _defaultChunkWidth = 100;
+        private int _defaultChunkWidth = 200;
         private int _defaultChunkHeight = 500;
         private ContentManager _content;
 
@@ -51,15 +49,22 @@ namespace Jump
 
         public void GenerateNext()
         {
+            Chunk chunk;
             // Generate a new chunk and add it to the list
-            Chunk chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+            bool yes = new Random().Next(5) == 1;
+            if (Chunks.Count > 1 && yes)
+            {
+                chunk = new HoleChunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+            }
+            else
+            {
+                chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+            }
             chunk.LoadContent(_content);
             _nextPostionX += chunk.Width + 5;
             Right = chunk.BoundingBox.Right;
 
-            bool yes = new Random().Next(10) > 1;
-            if (yes)
-                Chunks.Add(chunk);
+            Chunks.Add(chunk);
         }
 
         public void Kill(int index)
@@ -76,7 +81,7 @@ namespace Jump
             // Check to see if the player intersected with any of the chunks, if it does return the chunk
             foreach (Chunk chunk in Chunks)
             {
-                if (playerBoundingBox.Intersects(chunk.BoundingBox))
+                if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
                 {
                     return chunk;
                 }

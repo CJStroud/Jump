@@ -1,2 +1,0 @@
-Content\Player.xnb
-Content\Chunk.xnb
