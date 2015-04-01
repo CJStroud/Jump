@@ -1,4 +1,4 @@
-using System;
+using System.Runtime.InteropServices;
 using Jump.Chunks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -90,17 +90,22 @@ namespace Jump
 
             Player.Update(gameTime);
 
-            Chunk collidedChunk = ChunkManager.CheckCollision(Player.BoundingBox);
-            if (collidedChunk != null)
+            Sprite collidedSprite = ChunkManager.CheckCollision(Player.BoundingBox);
+            if (collidedSprite is Chunk)
             {
+                // todo need to check which side of the chunk the player is hitting.
+                // if it is the top then this is right, else it should be a failure state
                 Player.IsGrounded = true;
-                Player.Y = collidedChunk.Y - Player.Height;
+                Player.Y = collidedSprite.Y - Player.Height;  
             }
-            else
+            else if (collidedSprite is Obstacle)
             {
-                // todo move this to player
-                Player.IsGrounded = false;
+                Player.VelocityX = 0;
+                Player.X += 60;
+                Player.Y = 250;
             }
+
+
 
             Camera.Position = Player.Position;
 
@@ -115,7 +120,7 @@ namespace Jump
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // Draw the game components
+            // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
             Player.Draw(spriteBatch);
             ChunkManager.Draw(spriteBatch);

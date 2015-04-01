@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace Jump.Chunks
 {
@@ -9,6 +10,9 @@ namespace Jump.Chunks
             IsCollidable = false;
         }
 
+        public override void Draw(SpriteBatch spriteBatch)
+        {
 
+        }
     }
 }

@@ -75,7 +75,8 @@
     <Compile Include="Camera.cs" />
     <Compile Include="Chunks\Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
-    <Compile Include="HoleChunk.cs" />
+    <Compile Include="Chunks\HoleChunk.cs" />
+    <Compile Include="Obstacle.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />

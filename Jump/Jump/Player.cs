@@ -10,7 +10,7 @@ namespace Jump
         public float VelocityX { get { return Velocity.X; } set { Velocity = new Vector2(value, Velocity.Y); } }
         public float VelocityY { get { return Velocity.Y; } set { Velocity = new Vector2(Velocity.X, value); } }
 
-        public float Speed = 2.0f;
+        public float MaxSpeed = 5.0f;
         public float JumpSpeed = 6.0f;
 
         public Player(string assetName, Vector2 position, int width, int height) 
@@ -45,32 +45,16 @@ namespace Jump
                 // Apply gravity to the velocity
                 Velocity += gravity * delta;
             }
-            
 
             #endregion
 
-            // todo remove test movement code
-            if (keyboard.IsKeyDown(Keys.D))
+            if (VelocityX < MaxSpeed && IsGrounded)
             {
-                if (VelocityX < 10)
-                {
-                    VelocityX += Speed;
-                }
-            }
-            if (keyboard.IsKeyDown(Keys.A))
-            {
-                if (VelocityX > -10)
-                {
-                    VelocityX -= Speed;
-                }
+                VelocityX += 1f;
             }
 
 
-            if (VelocityX < 7 && IsGrounded)
-            {
-                VelocityX += Speed;
-            }
-
+            IsGrounded = false;
             // Apply the velocity of the player to their position
             Position = new Vector2(Position.X + Velocity.X, Position.Y + Velocity.Y);
 

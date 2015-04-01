@@ -16,6 +16,10 @@ namespace Jump
         private int _nextPostionX;
         private int _defaultChunkWidth = 200;
         private int _defaultChunkHeight = 500;
+
+        private int _defaultObsWidth = 30;
+        private int _defaultObsHeight = 30;
+
         private ContentManager _content;
 
         public ChunkManager(int screenWidth)
@@ -59,6 +63,7 @@ namespace Jump
             else
             {
                 chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width/2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
             }
             chunk.LoadContent(_content);
             _nextPostionX += chunk.Width + 5;
@@ -76,15 +81,20 @@ namespace Jump
             }
         }
 
-        public Chunk CheckCollision(Rectangle playerBoundingBox)
+        public Sprite CheckCollision(Rectangle playerBoundingBox)
         {
             // Check to see if the player intersected with any of the chunks, if it does return the chunk
             foreach (Chunk chunk in Chunks)
             {
+                if (chunk.Obstacle != null && playerBoundingBox.Intersects(chunk.Obstacle.BoundingBox))
+                {
+                    return chunk.Obstacle;
+                }
                 if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
                 {
                     return chunk;
                 }
+
             }
 
             return null;
