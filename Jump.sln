@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Jump", "Jump\Jump\Jump.csproj", "{48BD4C44-E2D3-41ED-A7A9-462E78ACA7B7}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "JumpContent", "Jump\JumpContent\JumpContent.contentproj", "{D53A6CC6-D4BB-4FFF-A336-189185B3FE0B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{48BD4C44-E2D3-41ED-A7A9-462E78ACA7B7}.Debug|x86.ActiveCfg = Debug|x86
+		{48BD4C44-E2D3-41ED-A7A9-462E78ACA7B7}.Debug|x86.Build.0 = Debug|x86
+		{48BD4C44-E2D3-41ED-A7A9-462E78ACA7B7}.Release|x86.ActiveCfg = Release|x86
+		{48BD4C44-E2D3-41ED-A7A9-462E78ACA7B7}.Release|x86.Build.0 = Release|x86
+		{D53A6CC6-D4BB-4FFF-A336-189185B3FE0B}.Debug|x86.ActiveCfg = Debug|x86
+		{D53A6CC6-D4BB-4FFF-A336-189185B3FE0B}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
