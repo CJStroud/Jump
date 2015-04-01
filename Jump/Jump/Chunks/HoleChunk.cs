@@ -1,7 +1,6 @@
-﻿using Jump.Chunks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
-namespace Jump
+namespace Jump.Chunks
 {
     public class HoleChunk : Chunk
     {
