@@ -18,8 +18,8 @@ namespace Jump
         public Camera Camera;
         public ChunkManager ChunkManager;
 
-        public Chunk Chunk1;
-        public Chunk Chunk2;
+        private bool _gameIsPaused;
+        private bool _isHoldingDownP;
 
         public Jump()
         {
@@ -81,10 +81,29 @@ namespace Jump
                 Exit();
             }
 
+            // If the player presses P then pause or unpause the game
+            // The is holding down p stops if from pausing and unpausing form one key press being read over mutliple updates
+            if (keyboardState.IsKeyDown(Keys.P) && !_isHoldingDownP)
+            {
+                _isHoldingDownP = true;
+                _gameIsPaused = !_gameIsPaused;
+            }
+            else if (!keyboardState.IsKeyDown(Keys.P))
+            {
+                _isHoldingDownP = false;
+            }
+
+            // if the game is paused then do not do any updates
+            if (_gameIsPaused)
+            {
+                return;
+            }
+
             if (Player.X >= ChunkManager.Right - 100)
             {
                 ChunkManager.GenerateNext();
             }
+
 
             ChunkManager.Update(Camera.Left);
 
