@@ -12,7 +12,7 @@ namespace Jump.Chunks
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-
+            // Don't draw anything because it's a hole!
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Jump.Chunks;
+﻿using System.Linq;
+using Jump.Chunks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -11,6 +12,7 @@ namespace Jump
     {
         public List<Chunk> Chunks;
         public int Right { get; private set; }
+        public int Left { get; private set; }
 
         private int _screenWidth;
         private int _nextPostionX;
@@ -54,16 +56,36 @@ namespace Jump
         public void GenerateNext()
         {
             Chunk chunk;
+            Random random = new Random();
+
+            // Randomise whether the next chunk is a hole 
+            bool isHole = false;
+            Chunk lastChunk = Chunks.LastOrDefault();
+            if (lastChunk != null && !lastChunk.HasObstacle)
+            {
+                isHole = random.Next(15) == 1;    
+            }            
+
             // Generate a new chunk and add it to the list
-            bool yes = new Random().Next(5) == 1;
-            if (Chunks.Count > 1 && yes)
+            if (isHole)
             {
                 chunk = new HoleChunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
             }
             else
             {
                 chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
-                chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width/2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
+
+                bool hasObstacle = false;
+                
+                if (lastChunk != null && !(lastChunk is HoleChunk) && !lastChunk.HasObstacle)
+                {
+                    hasObstacle = random.Next(2) == 1;
+                }
+
+                if (hasObstacle)
+                {
+                    chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
+                }
             }
             chunk.LoadContent(_content);
             _nextPostionX += chunk.Width + 5;
@@ -78,6 +100,7 @@ namespace Jump
             if (Chunks != null && Chunks.Count-1 >= index)
             {
                 Chunks.RemoveAt(index);
+                Left = Chunks.First().BoundingBox.Left;
             }
         }
 
@@ -98,6 +121,16 @@ namespace Jump
             }
 
             return null;
+        }
+
+        private Chunk GetLast()
+        {
+            if (Chunks == null || Chunks.Count == 0)
+            {
+                return null;
+            }
+
+            return Chunks.Last();
         }
 
         public void LoadContent(ContentManager content)

@@ -9,6 +9,7 @@ namespace Jump.Chunks
     {
         public bool IsCollidable { get; set; }
         public Obstacle Obstacle { get; set; }
+        public bool HasObstacle { get { return Obstacle != null; } }
 
         public Chunk(string assetName, Vector2 position, int width, int height)
             : base(assetName, position, width, height)
