@@ -10,6 +10,29 @@ namespace Jump
 {
     public class ChunkManager
     {
+        /// <summary>
+        /// Number between 0 and 1 to determine how often holes spawn
+        /// </summary>
+        public float HoleSpawnChance { get { return _holeSpawnChance; }
+            set
+            {
+                if (value > 1f)
+                {
+                    _holeSpawnChance = 100;
+                }
+                else if (value < 0f)
+                {
+                    _holeSpawnChance = 0;
+                }
+                else
+                {
+                    _holeSpawnChance = (int)(value * 100);
+                }
+            } 
+        }
+
+        private int _holeSpawnChance = 30;
+        
         public List<Chunk> Chunks;
         public int Right { get; private set; }
         public int Left { get; private set; }
@@ -53,17 +76,20 @@ namespace Jump
             }
         }
 
+
+
         public void GenerateNext()
         {
             Chunk chunk;
             Random random = new Random();
-
             // Randomise whether the next chunk is a hole 
             bool isHole = false;
             Chunk lastChunk = Chunks.LastOrDefault();
-            if (lastChunk != null && !lastChunk.HasObstacle)
+            bool doesNotNeedNormalChunk = lastChunk != null && !(lastChunk is HoleChunk) && !lastChunk.HasObstacle;
+
+            if (doesNotNeedNormalChunk)
             {
-                isHole = random.Next(15) == 1;    
+                isHole = random.Next(1, 100) < _holeSpawnChance;    
             }            
 
             // Generate a new chunk and add it to the list
@@ -76,8 +102,8 @@ namespace Jump
                 chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
 
                 bool hasObstacle = false;
-                
-                if (lastChunk != null && !(lastChunk is HoleChunk) && !lastChunk.HasObstacle)
+
+                if (lastChunk != null && !lastChunk.HasObstacle)
                 {
                     hasObstacle = random.Next(2) == 1;
                 }

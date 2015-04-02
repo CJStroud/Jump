@@ -25,7 +25,7 @@ namespace Jump
 
             #region Jumping Logic
 
-            Vector2 gravity = new Vector2(0, 10f);
+            Vector2 gravity = new Vector2(0, 15f);
             float delta = (float)gameTime.ElapsedGameTime.TotalSeconds;
 
 
