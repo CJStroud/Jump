@@ -10,6 +10,8 @@ namespace Jump
 
         public int Left { get { return (int)(Position.X -_halfViewSize.X); } }
 
+        public int Right { get { return (int)(Position.X + _halfViewSize.X*2); } }
+
         public Camera(Rectangle clientRect)
         {
             // Set the default view matrix using the rectangle passed through as the focus

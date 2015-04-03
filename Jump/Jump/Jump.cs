@@ -36,8 +36,10 @@ namespace Jump
         protected override void Initialize()
         {
             // Create a new player object starting at X 100 and Y 100
-            Player = new Player("Player", new Vector2(0, 0), 20, 40);
+            Player = new Player("Player", new Vector2(0, 0), 20, 38);
             ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Width);
+            ChunkManager.HoleSpawnChance = 0.35f;
+            ChunkManager.ObstacleSpawnChance = 0.35f;
 
             Camera = new Camera(GraphicsDevice.Viewport.Bounds);
 
@@ -99,13 +101,7 @@ namespace Jump
                 return;
             }
 
-            if (Player.X >= ChunkManager.Right - 100)
-            {
-                ChunkManager.GenerateNext();
-            }
-
-
-            ChunkManager.Update(Camera.Left);
+            ChunkManager.Update(Camera.Left, Camera.Right);
 
             Player.Update(gameTime);
 

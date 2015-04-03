@@ -32,6 +32,28 @@ namespace Jump
         }
 
         private int _holeSpawnChance = 30;
+
+        public float ObstacleSpawnChance
+        {
+            get { return _obstacleSpawnChance; }
+            set
+            {
+                if (value > 1f)
+                {
+                    _obstacleSpawnChance = 100;
+                }
+                else if (value < 0f)
+                {
+                    _obstacleSpawnChance = 0;
+                }
+                else
+                {
+                    _obstacleSpawnChance = (int)(value * 100);
+                }
+            }
+        }
+
+        private int _obstacleSpawnChance = 30;
         
         public List<Chunk> Chunks;
         public int Right { get; private set; }
@@ -39,7 +61,7 @@ namespace Jump
 
         private int _screenWidth;
         private int _nextPostionX;
-        private int _defaultChunkWidth = 200;
+        private int _defaultChunkWidth = 150;
         private int _defaultChunkHeight = 500;
 
         private int _defaultObsWidth = 30;
@@ -53,8 +75,18 @@ namespace Jump
             _screenWidth = screenWidth;
         }
 
-        public void Update(int leftOfScreen)
+        public void LoadContent(ContentManager content)
         {
+            _content = content;
+        }
+
+        public void Update(int leftOfScreen, int rightOfScreen)
+        {
+            if (rightOfScreen >= Right)
+            {
+                GenerateNext();
+            }
+
             if (Chunks.Count > 0)
             {
                 bool firstChunkIsOutsideScreen = Chunks[0].DestinationRectangle.Right < leftOfScreen;
@@ -76,12 +108,11 @@ namespace Jump
             }
         }
 
-
-
         public void GenerateNext()
         {
             Chunk chunk;
             Random random = new Random();
+
             // Randomise whether the next chunk is a hole 
             bool isHole = false;
             Chunk lastChunk = Chunks.LastOrDefault();
@@ -99,13 +130,13 @@ namespace Jump
             }
             else
             {
-                chunk = new Chunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
 
                 bool hasObstacle = false;
 
                 if (lastChunk != null && !lastChunk.HasObstacle)
                 {
-                    hasObstacle = random.Next(2) == 1;
+                    hasObstacle = random.Next(1, 100) < _obstacleSpawnChance;    
                 }
 
                 if (hasObstacle)
@@ -113,8 +144,9 @@ namespace Jump
                     chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
                 }
             }
+
             chunk.LoadContent(_content);
-            _nextPostionX += chunk.Width + 5;
+            _nextPostionX += chunk.Width;
             Right = chunk.BoundingBox.Right;
 
             Chunks.Add(chunk);
@@ -149,19 +181,6 @@ namespace Jump
             return null;
         }
 
-        private Chunk GetLast()
-        {
-            if (Chunks == null || Chunks.Count == 0)
-            {
-                return null;
-            }
 
-            return Chunks.Last();
-        }
-
-        public void LoadContent(ContentManager content)
-        {
-            _content = content;
-        }
     }
 }
