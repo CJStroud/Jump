@@ -35,9 +35,12 @@ namespace Jump
         /// </summary>
         protected override void Initialize()
         {
+            // set background colour
+            
+
             // Create a new player object starting at X 100 and Y 100
-            Player = new Player("Player", new Vector2(0, 0), 20, 38);
-            ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Width);
+            Player = new Player("Player", new Vector2(400, 0), 20, 38, 50, 50, 4, 0.1f);
+            ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Bounds);
             ChunkManager.HoleSpawnChance = 0.35f;
             ChunkManager.ObstacleSpawnChance = 0.35f;
 
@@ -135,7 +138,7 @@ namespace Jump
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(new Color(58, 159, 229));
 
             // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);

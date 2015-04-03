@@ -9,8 +9,11 @@ namespace Jump
     public abstract class Sprite
     {
         public Texture2D Texture { get; private set; }
-        public int TextureWidth { get; private set; }
-        public int TextureHeight { get; private set; }
+        protected int TextureWidth { get; set; }
+        protected int TextureHeight { get; set; }
+
+        // Todo change x and y to be parameter driven
+        protected Rectangle SourceRectangle; 
 
         /// <summary>
         /// The position on screen of the sprite
@@ -76,15 +79,16 @@ namespace Jump
             }
 
             // Draws the Sprite to the spritebatch. We use null as the source rectangle so it uses the entire texture.
-            spriteBatch.Draw(Texture, DestinationRectangle, null, Color.White, Rotation, Origin, SpriteEffects.None, LayerDepth);    
+            spriteBatch.Draw(Texture, DestinationRectangle, SourceRectangle, Color.White, Rotation, Origin, SpriteEffects.None, LayerDepth);    
         }
 
         public virtual void LoadContent(ContentManager content)
         {
             // Load the texture using the content manager
             Texture = content.Load<Texture2D>(_assetName);
-            TextureWidth = Texture.Width;
-            TextureHeight = Texture.Height;
+            TextureWidth = TextureWidth == 0 ? Texture.Width : TextureWidth;
+            TextureHeight = TextureHeight == 0 ? Texture.Height : TextureHeight;
+            SourceRectangle = new Rectangle(0, 0, TextureWidth, TextureHeight);
         }
 
         public virtual void Update(GameTime gameTime)

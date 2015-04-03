@@ -69,15 +69,22 @@ namespace Jump
 
         private ContentManager _content;
 
-        public ChunkManager(int screenWidth)
+        private Rectangle _startingViewport;
+
+        public ChunkManager(Rectangle viewport)
         {
             Chunks = new List<Chunk>();
-            _screenWidth = screenWidth;
+            _screenWidth = viewport.Width;
+            _startingViewport = viewport;
         }
 
         public void LoadContent(ContentManager content)
         {
             _content = content;
+            while (_startingViewport.Right > Right)
+            {
+                GenerateNext(true);
+            } 
         }
 
         public void Update(int leftOfScreen, int rightOfScreen)
@@ -110,40 +117,53 @@ namespace Jump
 
         public void GenerateNext()
         {
+            GenerateNext(false);
+        }
+
+        public void GenerateNext(bool normalChunk)
+        {
             Chunk chunk;
             Random random = new Random();
 
-            // Randomise whether the next chunk is a hole 
-            bool isHole = false;
-            Chunk lastChunk = Chunks.LastOrDefault();
-            bool doesNotNeedNormalChunk = lastChunk != null && !(lastChunk is HoleChunk) && !lastChunk.HasObstacle;
-
-            if (doesNotNeedNormalChunk)
+            if (normalChunk)
             {
-                isHole = random.Next(1, 100) < _holeSpawnChance;    
-            }            
-
-            // Generate a new chunk and add it to the list
-            if (isHole)
-            {
-                chunk = new HoleChunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight); ;
             }
             else
             {
-                chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                // Randomise whether the next chunk is a hole 
+                bool isHole = false;
+                Chunk lastChunk = Chunks.LastOrDefault();
+                bool doesNotNeedNormalChunk = lastChunk != null && !(lastChunk is HoleChunk) && !lastChunk.HasObstacle;
 
-                bool hasObstacle = false;
-
-                if (lastChunk != null && !lastChunk.HasObstacle)
+                if (doesNotNeedNormalChunk)
                 {
-                    hasObstacle = random.Next(1, 100) < _obstacleSpawnChance;    
+                    isHole = random.Next(1, 100) < _holeSpawnChance;
                 }
 
-                if (hasObstacle)
+                // Generate a new chunk and add it to the list
+                if (isHole)
                 {
-                    chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
+                    chunk = new HoleChunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                }
+                else
+                {
+                    chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+
+                    bool hasObstacle = false;
+
+                    if (lastChunk != null && !lastChunk.HasObstacle)
+                    {
+                        hasObstacle = random.Next(1, 100) < _obstacleSpawnChance;
+                    }
+
+                    if (hasObstacle)
+                    {
+                        chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
+                    }
                 }
             }
+
 
             chunk.LoadContent(_content);
             _nextPostionX += chunk.Width;

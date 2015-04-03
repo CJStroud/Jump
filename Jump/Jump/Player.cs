@@ -3,8 +3,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Jump
 {
-    public class Player : Sprite
+    public class Player : Sprite, IAnimated
     {
+        #region Animation Variables
+
+        public float TotalElapsed { get; set; }
+        public float TimePerFrame { get; set; }
+        public int Frame { get; set; }
+        public int FrameCount { get; set; }
+
+        #endregion
+
         public bool IsGrounded { get; set; }
         public Vector2 Velocity { get; private set; }
         public float VelocityX { get { return Velocity.X; } set { Velocity = new Vector2(value, Velocity.Y); } }
@@ -13,13 +22,40 @@ namespace Jump
         public float MaxSpeed = 5.0f;
         public float JumpSpeed = 6.0f;
 
-        public Player(string assetName, Vector2 position, int width, int height) 
+        public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight) 
             : base(assetName, position, width, height)
         {
+            TextureWidth = textureWidth;
+            TextureHeight = textureHeight;
+        }
+
+        public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight,
+            int frameCount, float timePerFrame)
+            : this(assetName, position, width, height, textureWidth, textureHeight)
+        {
+            FrameCount = frameCount;
+            TimePerFrame = timePerFrame;
+            Frame = 1;
         }
 
         public override void Update(GameTime gameTime)
         {
+            float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+
+            #region Animation
+
+            TotalElapsed += elapsed;
+            if (TotalElapsed > TimePerFrame)
+            {
+                Frame++;
+                // Keep the Frame between 0 and the total frames, minus one.
+                Frame = Frame % FrameCount;
+                TotalElapsed -= TimePerFrame;
+                SourceRectangle = new Rectangle(TextureWidth*Frame, SourceRectangle.Y, TextureWidth, TextureHeight);
+            }
+
+            #endregion
+
 
             KeyboardState keyboard = Keyboard.GetState();
 
@@ -60,5 +96,15 @@ namespace Jump
 
             base.Update(gameTime);
         }
+
+
+    }
+
+    public interface IAnimated
+    {
+        float TotalElapsed { get; set; }
+        float TimePerFrame { get; set; }
+        int Frame { get; set; }
+        int FrameCount { get; set; }
     }
 }
