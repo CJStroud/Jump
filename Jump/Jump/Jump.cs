@@ -104,13 +104,15 @@ namespace Jump
             ChunkManager.Update(Camera.Left, Camera.Right);
 
             Player.Update(gameTime);
+            
+
 
             Sprite collidedSprite = ChunkManager.CheckCollision(Player.BoundingBox);
             if (collidedSprite is Chunk)
             {
                 // todo need to check which side of the chunk the player is hitting.
                 // if it is the top then this is right, else it should be a failure state
-                Player.IsGrounded = true;
+                 Player.IsGrounded = true;
                 Player.Y = collidedSprite.Y - Player.Height;  
             }
             else if (collidedSprite is Obstacle)
@@ -120,9 +122,9 @@ namespace Jump
                 Player.Y = 250;
             }
 
-
-
             Camera.Position = Player.Position;
+
+            
 
             base.Update(gameTime);
         }

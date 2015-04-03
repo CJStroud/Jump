@@ -8,6 +8,8 @@ namespace Jump
         private Vector2 _position;
         private Vector2 _halfViewSize;
 
+        private int _yToFollow = 463;
+
         public int Left { get { return (int)(Position.X -_halfViewSize.X); } }
 
         public int Right { get { return (int)(Position.X + _halfViewSize.X*2); } }
@@ -39,7 +41,7 @@ namespace Jump
         private void UpdateViewMatrix()
         {
             // Change the view matrix depending on the new position
-            ViewMatrix = Matrix.CreateTranslation(_halfViewSize.X - _position.X, _halfViewSize.Y - _position.Y, 0.0f) * Matrix.CreateScale(0.65f, 0.65f, 0);
+            ViewMatrix = Matrix.CreateTranslation(_halfViewSize.X - _position.X, _halfViewSize.Y - (int)(_yToFollow*1.3), 0.0f) * Matrix.CreateScale(0.85f, 0.85f, 0);
         }
     }
 }
