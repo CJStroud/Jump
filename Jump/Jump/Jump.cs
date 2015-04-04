@@ -15,12 +15,18 @@ namespace Jump
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        public Color FontColour;
+
         public Player Player;
         public Camera Camera;
         public ChunkManager ChunkManager;
 
         private bool _gameIsPaused;
         private bool _isHoldingDownP;
+
+        private SpriteFont _scoreFont;
+
+        private int _score = 0;
 
         public Jump()
         {
@@ -36,7 +42,8 @@ namespace Jump
         /// </summary>
         protected override void Initialize()
         {
-            // set background colour
+            // set font colour
+            FontColour = new Color(10, 53, 83);
             
 
             // Create a new player object starting at X 100 and Y 100
@@ -58,6 +65,7 @@ namespace Jump
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            _scoreFont = Content.Load<SpriteFont>("Score");
 
             Player.LoadContent(Content);
             ChunkManager.LoadContent(Content);
@@ -117,16 +125,9 @@ namespace Jump
                 Player.IsGrounded = true;
                 Player.Y = collidedSprite.Y - Player.Height + 1;  
             }
-            else if (collidedSprite is Obstacle)
+            else if (collidedSprite is Obstacle || Player.Y > 700)
             {
-                Player.VelocityX = 0;
-                Player.X += 60;
-                Player.Y = 250;
-
-                ChunkManager.Clear();
-                Player.Position = new Vector2(400,0);
-                Player.IsGrounded = false;
-                ChunkManager.GenerateDefault();
+                ResetGame();   
             }
             else if (collidedSprite == null)
             {
@@ -136,9 +137,23 @@ namespace Jump
             Player.Update(gameTime);
             Camera.Position = Player.Position;
 
+            _score += (int)Player.VelocityX;
             
 
             base.Update(gameTime);
+        }
+
+        public void ResetGame()
+        {
+            Player.VelocityX = 0;
+            Player.X += 60;
+            Player.Y = 250;
+
+            ChunkManager.Clear();
+            Player.Position = new Vector2(400, 0);
+            Player.IsGrounded = false;
+            ChunkManager.GenerateDefault();
+            _score = 0;
         }
 
         /// <summary>
@@ -151,6 +166,7 @@ namespace Jump
 
             // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
+            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour);
             Player.Draw(spriteBatch);
             ChunkManager.Draw(spriteBatch);
             spriteBatch.End();

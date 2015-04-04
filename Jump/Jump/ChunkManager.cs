@@ -141,7 +141,7 @@ namespace Jump
                 // Generate a new chunk and add it to the list
                 if (isHole)
                 {
-                    chunk = new HoleChunk("Chunk", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                    chunk = new HoleChunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
                 }
                 else
                 {
