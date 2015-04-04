@@ -44,15 +44,24 @@ namespace Jump
 
             #region Animation
 
-            TotalElapsed += elapsed;
-            if (TotalElapsed > TimePerFrame)
+            if (!IsGrounded)
             {
-                Frame++;
-                // Keep the Frame between 0 and the total frames, minus one.
-                Frame = Frame % FrameCount;
-                TotalElapsed -= TimePerFrame;
-                SourceRectangle = new Rectangle(TextureWidth*Frame, SourceRectangle.Y, TextureWidth, TextureHeight);
+                Frame = 4;
+                SourceRectangle = new Rectangle(TextureWidth * Frame, SourceRectangle.Y, TextureWidth, TextureHeight);
             }
+            else
+            {
+                TotalElapsed += elapsed;
+                if (TotalElapsed > TimePerFrame)
+                {
+                    Frame++;
+                    // Keep the Frame between 0 and the total frames, minus one.
+                    Frame = Frame % FrameCount;
+                    TotalElapsed -= TimePerFrame;
+                    SourceRectangle = new Rectangle(TextureWidth * Frame, SourceRectangle.Y, TextureWidth, TextureHeight);
+                }
+            }
+
 
             #endregion
 
@@ -89,8 +98,6 @@ namespace Jump
                 VelocityX += 1f;
             }
 
-
-            IsGrounded = false;
             // Apply the velocity of the player to their position
             Position = new Vector2(Position.X + Velocity.X, Position.Y + Velocity.Y);
 

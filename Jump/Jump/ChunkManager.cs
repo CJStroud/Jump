@@ -159,7 +159,7 @@ namespace Jump
 
                     if (hasObstacle)
                     {
-                        chunk.Obstacle = new Obstacle("Obstacle", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - _defaultObsHeight), _defaultObsWidth, _defaultObsHeight);
+                        chunk.Obstacle = new Obstacle("Antenna", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - 50), 50, 80);
                     }
                 }
             }
