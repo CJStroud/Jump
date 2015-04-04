@@ -27,7 +27,7 @@ namespace Jump
 
         private SpriteFont _scoreFont;
 
-        private int _score = 0;
+        private int _score;
 
         public Jump()
         {
@@ -124,12 +124,12 @@ namespace Jump
             if (reason == CollisionReason.Gravity)
             {
                 Player.IsGrounded = true;
-                Player.Y = ChunkManager.GetChunkAtX(Player.X).Y - Player.Height + 1;  
+                Player.Y = ChunkManager.LastIntersection.Y - Player.Height + 1;  
             }
             // if the reason is that the player hit an obstacle or fell off a building then reset the game
             else if (reason == CollisionReason.HitObstacle || Player.Y > 700)
             {
-                ResetGame();   
+                Reset();   
             }
             // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
             else if (reason == CollisionReason.HitBuilding)
@@ -153,7 +153,7 @@ namespace Jump
             base.Update(gameTime);
         }
 
-        public void ResetGame()
+        public void Reset()
         {
             // Reset all of the game components and variables
             _score = 0;

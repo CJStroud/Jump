@@ -67,9 +67,13 @@ namespace Jump
         private int _defaultChunkWidth = 150;
         private int _defaultChunkHeight = 500;
 
+        public Chunk LastIntersection { get; private set; }
+
         private ContentManager _content;
 
         private Rectangle _startingViewport;
+
+        public int ChunkY = 500;
 
         public ChunkManager(Rectangle viewport)
         {
@@ -124,7 +128,7 @@ namespace Jump
 
             if (normalChunk)
             {
-                chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight); ;
+                chunk = new Chunk("Building", new Vector2(_nextPostionX, ChunkY), _defaultChunkWidth, _defaultChunkHeight); ;
             }
             else
             {
@@ -141,11 +145,17 @@ namespace Jump
                 // Generate a new chunk and add it to the list
                 if (isHole)
                 {
-                    chunk = new HoleChunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                    chunk = new HoleChunk("Building", new Vector2(_nextPostionX, ChunkY), _defaultChunkWidth, _defaultChunkHeight);
                 }
                 else
                 {
-                    chunk = new Chunk("Building", new Vector2(_nextPostionX, 500), _defaultChunkWidth, _defaultChunkHeight);
+                    if (lastChunk is HoleChunk)
+                    {
+                        int i = random.Next(3);
+                        ChunkY = 475 + (i * 25);
+                    }
+
+                    chunk = new Chunk("Building", new Vector2(_nextPostionX, ChunkY), _defaultChunkWidth, _defaultChunkHeight);
 
                     bool hasObstacle = false;
 
@@ -213,6 +223,8 @@ namespace Jump
                 if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
                 {
 
+                    LastIntersection = chunk;
+
                     Vector2 sourceMinimum = new Vector2(playerBoundingBox.X, playerBoundingBox.Y);
                     Vector2 sourceMaximum = new Vector2(playerBoundingBox.Right, playerBoundingBox.Bottom);
 
@@ -258,14 +270,9 @@ namespace Jump
             return CollisionReason.None;
         }
 
-
-        public Chunk GetChunkAtX(float x)
-        {
-            return Chunks.Find(chunk => chunk.X <= x && chunk.BoundingBox.Right <= x + _defaultChunkWidth);
-        }
-
         public void Reset()
         {
+            ChunkY = 500;
             Chunks.Clear();
             Right = 0;
             Left = 0;
