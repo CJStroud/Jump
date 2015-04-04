@@ -73,19 +73,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
-    <Compile Include="Chunks\Chunk.cs" />
+    <Compile Include="Sprites\Chunks\Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
-    <Compile Include="Chunks\HoleChunk.cs" />
+    <Compile Include="Sprites\Chunks\HoleChunk.cs" />
     <Compile Include="IAnimated.cs" />
-    <Compile Include="Obstacles\Antenna.cs" />
-    <Compile Include="Obstacles\Fan.cs" />
-    <Compile Include="Obstacles\Obstacle.cs" />
-    <Compile Include="Obstacles\RoofDoor.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Sprites\Obstacles\Antenna.cs" />
+    <Compile Include="Sprites\Obstacles\Fan.cs" />
+    <Compile Include="Sprites\Obstacles\Obstacle.cs" />
+    <Compile Include="Sprites\Obstacles\RoofDoor.cs" />
+    <Compile Include="Sprites\Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Jump.cs" />
-    <Compile Include="Sprite.cs" />
+    <Compile Include="Sprites\Sprite.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />

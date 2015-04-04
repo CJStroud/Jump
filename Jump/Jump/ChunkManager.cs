@@ -1,6 +1,8 @@
 ﻿using System.Linq;
-using Jump.Chunks;
 using Jump.Obstacles;
+using Jump.Sprites;
+using Jump.Sprites.Chunks;
+using Jump.Sprites.Obstacles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 
-namespace Jump
+namespace Jump.Sprites.Obstacles
 {
-    public class Obstacle : Sprite
+    public abstract class Obstacle : Sprite
     {
         public Obstacle(string assetName, Vector2 position, int width, int height) : base(assetName, position, width, height)
         {

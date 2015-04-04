@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Jump.Chunks
+namespace Jump.Sprites.Chunks
 {
     public class HoleChunk : Chunk
     {

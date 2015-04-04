@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 
-namespace Jump
+namespace Jump.Sprites
 {
     public class Player : Sprite, IAnimated
     {

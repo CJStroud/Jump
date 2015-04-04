@@ -1,4 +1,6 @@
-using Jump.Chunks;
+using Jump.Sprites;
+using Jump.Sprites.Chunks;
+using Jump.Sprites.Obstacles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;

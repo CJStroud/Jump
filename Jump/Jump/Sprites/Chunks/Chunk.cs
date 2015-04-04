@@ -1,8 +1,9 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Jump.Sprites.Obstacles;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Jump.Chunks
+namespace Jump.Sprites.Chunks
 {
     public class Chunk : Sprite
     {
