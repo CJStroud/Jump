@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Jump.Chunks;
+using Jump.Obstacles;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
@@ -159,7 +160,21 @@ namespace Jump
 
                     if (hasObstacle)
                     {
-                        chunk.Obstacle = new Obstacle("Antenna", new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y - 50), 50, 80);
+                        int i = random.Next(3);
+
+                        switch (i)
+                        {
+                            case 0: chunk.Obstacle = new RoofDoor(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
+                                break;
+
+                            case 1: chunk.Obstacle = new Antenna(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
+                                break;
+
+                            case 2: chunk.Obstacle = new Fan(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
+                                break;
+                            
+                        }
+
                     }
                 }
             }
