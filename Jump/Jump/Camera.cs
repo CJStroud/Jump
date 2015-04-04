@@ -52,7 +52,7 @@ namespace Jump
         private void UpdateViewMatrix()
         {
             // Change the view matrix depending on the new position
-            ViewMatrix = Matrix.CreateTranslation(_halfViewSize.X - _position.X, _halfViewSize.Y - (int)(_yToFollow*1.3), 0.0f) * Matrix.CreateScale(0.85f, 0.85f, 0);
+            ViewMatrix = Matrix.CreateTranslation(_halfViewSize.X - _position.X - 200, _halfViewSize.Y - (int)(_yToFollow*1.3), 0.0f) * Matrix.CreateScale(0.85f, 0.85f, 0);
         }
     }
 }

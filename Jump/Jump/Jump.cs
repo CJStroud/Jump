@@ -46,7 +46,6 @@ namespace Jump
             // set font colour
             FontColour = new Color(10, 53, 83);
             
-
             // Create a new player object starting at X 100 and Y 100
             Player = new Player("Player", new Vector2(400, 0), 20, 38, 50, 50, 4, 0.1f);
             ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Bounds);
@@ -173,7 +172,7 @@ namespace Jump
 
             // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
-            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
+            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 210, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
             Player.Draw(spriteBatch);
             ChunkManager.Draw(spriteBatch);
             spriteBatch.End();
