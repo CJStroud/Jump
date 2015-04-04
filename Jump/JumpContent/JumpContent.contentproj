@@ -65,10 +65,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Score.spritefont">
-      <Name>Score</Name>
-      <Importer>FontDescriptionImporter</Importer>
-      <Processor>FontDescriptionProcessor</Processor>
+    <Compile Include="zekton free.bmp">
+      <Name>zekton free</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>FontTextureProcessor</Processor>
     </Compile>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\$(XnaFrameworkVersion)\Microsoft.Xna.GameStudio.ContentPipeline.targets" />

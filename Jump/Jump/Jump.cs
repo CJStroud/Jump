@@ -66,7 +66,7 @@ namespace Jump
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _scoreFont = Content.Load<SpriteFont>("Score");
+            _scoreFont = Content.Load<SpriteFont>("zekton free");
 
             Player.LoadContent(Content);
             ChunkManager.LoadContent(Content);
@@ -173,7 +173,7 @@ namespace Jump
 
             // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
-            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour);
+            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
             Player.Draw(spriteBatch);
             ChunkManager.Draw(spriteBatch);
             spriteBatch.End();
