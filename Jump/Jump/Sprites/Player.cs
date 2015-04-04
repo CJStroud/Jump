@@ -106,5 +106,13 @@ namespace Jump.Sprites
         }
 
 
+        public void Reset()
+        {
+            VelocityX = 0;
+            X += 60;
+            Y = 250;
+            Position = new Vector2(400, 0);
+            IsGrounded = false;
+        }
     }
 }

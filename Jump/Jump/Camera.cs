@@ -35,9 +35,17 @@ namespace Jump
 
             set
             {
+                // set x value if x position is higher
+                if (value.X < _position.X)
+                    return;
                 _position = value;
                 UpdateViewMatrix();
             }
+        }
+
+        public void Reset()
+        {
+            _position = new Vector2(0, _yToFollow);
         }
 
 

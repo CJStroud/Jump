@@ -201,33 +201,76 @@ namespace Jump
             }
         }
 
-        public void Clear()
-        {
-            Chunks.Clear();
-            Right = 0;
-            Left = 0;
-            _nextPostionX = 0;
-        }
-
-        public Sprite CheckCollision(Rectangle playerBoundingBox)
+        public CollisionReason CheckCollision(Rectangle playerBoundingBox)
         {
             // Check to see if the player intersected with any of the chunks, if it does return the chunk
             foreach (Chunk chunk in Chunks)
             {
                 if (chunk.Obstacle != null && playerBoundingBox.Intersects(chunk.Obstacle.BoundingBox))
                 {
-                    return chunk.Obstacle;
+                    return CollisionReason.HitObstacle;
                 }
                 if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
                 {
-                    return chunk;
+
+                    Vector2 sourceMinimum = new Vector2(playerBoundingBox.X, playerBoundingBox.Y);
+                    Vector2 sourceMaximum = new Vector2(playerBoundingBox.Right, playerBoundingBox.Bottom);
+
+                    Vector2 targetMinimum = new Vector2(chunk.BoundingBox.X, chunk.BoundingBox.Y);
+                    Vector2 targetMaximum = new Vector2(chunk.BoundingBox.Right, chunk.BoundingBox.Bottom);
+
+                    Vector2 MinimumTranslationDistance = new Vector2();
+
+                    float left = (targetMinimum.X - sourceMaximum.X);
+                    float right = (targetMaximum.X - sourceMinimum.X);
+                    float top = (targetMinimum.Y - sourceMaximum.Y);
+                    float bottom = (targetMaximum.Y - sourceMinimum.Y);
+
+                    if (left > 0 || right < 0) throw new Exception("no intersection");
+                    if (top > 0 || bottom < 0) throw new Exception("no intersection");
+
+                    // work out the mtd on both x and y axes.
+                    if (Math.Abs(left) < right)
+                        MinimumTranslationDistance.X = left;
+                    else
+                        MinimumTranslationDistance.X = right;
+
+                    if (Math.Abs(top) < bottom)
+                        MinimumTranslationDistance.Y = top;
+                    else
+                        MinimumTranslationDistance.Y = bottom;
+
+                    // 0 the axis with the largest mtd value.
+                    if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
+                        MinimumTranslationDistance.Y = 0;
+                    else
+                        MinimumTranslationDistance.X = 0;
+
+                    if (MinimumTranslationDistance.Y < MinimumTranslationDistance.X)
+                    {
+                        return CollisionReason.Gravity;
+                    }
+                    return CollisionReason.HitBuilding;
                 }
 
             }
 
-            return null;
+            return CollisionReason.None;
         }
 
 
+        public Chunk GetChunkAtX(float x)
+        {
+            return Chunks.Find(chunk => chunk.X <= x && chunk.BoundingBox.Right <= x + _defaultChunkWidth);
+        }
+
+        public void Reset()
+        {
+            Chunks.Clear();
+            Right = 0;
+            Left = 0;
+            _nextPostionX = 0;
+            GenerateDefault();
+        }
     }
 }

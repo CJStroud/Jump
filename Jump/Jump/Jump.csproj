@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Camera.cs" />
+    <Compile Include="CollisionReason.cs" />
     <Compile Include="Sprites\Chunks\Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Sprites\Chunks\HoleChunk.cs" />

@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using Jump.Sprites;
 using Jump.Sprites.Chunks;
 using Jump.Sprites.Obstacles;
@@ -113,23 +114,32 @@ namespace Jump
                 return;
             }
 
+            // Update the chunk manager
             ChunkManager.Update(Camera.Left, Camera.Right);
 
 
-            Sprite collidedSprite = ChunkManager.CheckCollision(Player.BoundingBox);
-            // todo need to check which side of the chunk the player is hitting.
-            // if it is the top then this is right, else it should be a failure state
+            CollisionReason reason = ChunkManager.CheckCollision(Player.BoundingBox);
 
-            if (collidedSprite is Chunk)
+            // if the reason is because of gravity then just move the player so they are above the chunk they collided with
+            if (reason == CollisionReason.Gravity)
             {
                 Player.IsGrounded = true;
-                Player.Y = collidedSprite.Y - Player.Height + 1;  
+                Player.Y = ChunkManager.GetChunkAtX(Player.X).Y - Player.Height + 1;  
             }
-            else if (collidedSprite is Obstacle || Player.Y > 700)
+            // if the reason is that the player hit an obstacle or fell off a building then reset the game
+            else if (reason == CollisionReason.HitObstacle || Player.Y > 700)
             {
                 ResetGame();   
             }
-            else if (collidedSprite == null)
+            // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
+            else if (reason == CollisionReason.HitBuilding)
+            {
+                Player.X -= Player.Width;
+                Player.VelocityX = 0;
+                Player.IsGrounded = false;
+            }
+            // if there is no collision the player must be off the ground
+            else if (reason == CollisionReason.None)
             {
                 Player.IsGrounded = false;
             }
@@ -145,15 +155,12 @@ namespace Jump
 
         public void ResetGame()
         {
-            Player.VelocityX = 0;
-            Player.X += 60;
-            Player.Y = 250;
-
-            ChunkManager.Clear();
-            Player.Position = new Vector2(400, 0);
-            Player.IsGrounded = false;
-            ChunkManager.GenerateDefault();
+            // Reset all of the game components and variables
             _score = 0;
+
+            Player.Reset();
+            ChunkManager.Reset();
+            Camera.Reset();
         }
 
         /// <summary>
