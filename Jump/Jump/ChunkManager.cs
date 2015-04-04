@@ -65,9 +65,6 @@ namespace Jump
         private int _defaultChunkWidth = 150;
         private int _defaultChunkHeight = 500;
 
-        private int _defaultObsWidth = 30;
-        private int _defaultObsHeight = 30;
-
         private ContentManager _content;
 
         private Rectangle _startingViewport;
@@ -82,10 +79,7 @@ namespace Jump
         public void LoadContent(ContentManager content)
         {
             _content = content;
-            while (_startingViewport.Right > Right)
-            {
-                GenerateNext(true);
-            } 
+            GenerateDefault();
         }
 
         public void Update(int leftOfScreen, int rightOfScreen)
@@ -187,6 +181,14 @@ namespace Jump
             Chunks.Add(chunk);
         }
 
+        public void GenerateDefault()
+        {
+            while (_startingViewport.Right + _defaultChunkWidth > Right)
+            {
+                GenerateNext(true);
+            } 
+        }
+
         public void Kill(int index)
         {
             // Try and remove the chunk at the specified index
@@ -195,6 +197,14 @@ namespace Jump
                 Chunks.RemoveAt(index);
                 Left = Chunks.First().BoundingBox.Left;
             }
+        }
+
+        public void Clear()
+        {
+            Chunks.Clear();
+            Right = 0;
+            Left = 0;
+            _nextPostionX = 0;
         }
 
         public Sprite CheckCollision(Rectangle playerBoundingBox)

@@ -105,9 +105,6 @@ namespace Jump
 
             ChunkManager.Update(Camera.Left, Camera.Right);
 
-            
-            
-
 
             Sprite collidedSprite = ChunkManager.CheckCollision(Player.BoundingBox);
             // todo need to check which side of the chunk the player is hitting.
@@ -123,6 +120,11 @@ namespace Jump
                 Player.VelocityX = 0;
                 Player.X += 60;
                 Player.Y = 250;
+
+                ChunkManager.Clear();
+                Player.Position = new Vector2(400,0);
+                Player.IsGrounded = false;
+                ChunkManager.GenerateDefault();
             }
             else if (collidedSprite == null)
             {

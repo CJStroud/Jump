@@ -8,6 +8,8 @@ namespace Jump
         private Vector2 _position;
         private Vector2 _halfViewSize;
 
+        public Rectangle Viewport { get { return new Rectangle((int)(Position.X - _halfViewSize.X), (int)Position.Y, (int)_halfViewSize.X*2, (int)_halfViewSize.Y); } }
+
         private int _yToFollow = 463;
 
         public int Left { get { return (int)(Position.X -_halfViewSize.X); } }
@@ -37,6 +39,7 @@ namespace Jump
                 UpdateViewMatrix();
             }
         }
+
 
         private void UpdateViewMatrix()
         {

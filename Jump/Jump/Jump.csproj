@@ -76,6 +76,7 @@
     <Compile Include="Chunks\Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Chunks\HoleChunk.cs" />
+    <Compile Include="IAnimated.cs" />
     <Compile Include="Obstacles\Antenna.cs" />
     <Compile Include="Obstacles\Fan.cs" />
     <Compile Include="Obstacles\Obstacle.cs" />

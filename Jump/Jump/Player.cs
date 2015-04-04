@@ -35,7 +35,6 @@ namespace Jump
         {
             FrameCount = frameCount;
             TimePerFrame = timePerFrame;
-            Frame = 1;
         }
 
         public override void Update(GameTime gameTime)
@@ -46,6 +45,7 @@ namespace Jump
 
             if (!IsGrounded)
             {
+                // if player is the air show the jump texture
                 Frame = 4;
                 SourceRectangle = new Rectangle(TextureWidth * Frame, SourceRectangle.Y, TextureWidth, TextureHeight);
             }
@@ -93,6 +93,7 @@ namespace Jump
 
             #endregion
 
+            // speed up, unless player has reached max speed or is in the air
             if (VelocityX < MaxSpeed && IsGrounded)
             {
                 VelocityX += 1f;
@@ -105,13 +106,5 @@ namespace Jump
         }
 
 
-    }
-
-    public interface IAnimated
-    {
-        float TotalElapsed { get; set; }
-        float TimePerFrame { get; set; }
-        int Frame { get; set; }
-        int FrameCount { get; set; }
     }
 }
