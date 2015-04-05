@@ -93,7 +93,7 @@ namespace Jump.Sprites
                 if (keyboard.IsKeyDown(Keys.Space))
                 {
                    VelocityY -= JumpSpeed;
-                    _audioManager.PlaySoundEffect("boing");
+                    _audioManager.PlaySoundEffect("jump");
                 }
             }
             else

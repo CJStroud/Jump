@@ -72,13 +72,12 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sounds\boing.wav">
-      <Name>boing</Name>
+    <Compile Include="Sounds\jump.wav">
+      <Name>jump</Name>
       <Importer>WavImporter</Importer>
       <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Compile Include="Sounds\click.wav">
       <Name>click</Name>
@@ -91,13 +90,6 @@
       <Name>background</Name>
       <Importer>WavImporter</Importer>
       <Processor>SongProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Sounds\boing2.wav">
-      <Name>boing2</Name>
-      <Importer>WavImporter</Importer>
-      <Processor>SoundEffectProcessor</Processor>
     </Compile>
   </ItemGroup>
   <ItemGroup>

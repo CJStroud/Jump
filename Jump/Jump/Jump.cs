@@ -92,7 +92,7 @@ namespace Jump
             Camera.Position = Player.Position;
 
             _audioManager.LoadContent();
-            _audioManager.LoadSoundEffect("boing", "Sounds/boing2");
+            _audioManager.LoadSoundEffect("jump", "Sounds/jump");
             _audioManager.LoadSoundEffect("click", "Sounds/click");
             _audioManager.LoadSoundEffect("scream", "Sounds/scream");
             _audioManager.LoadSong("background", "Sounds/background");
@@ -274,7 +274,7 @@ namespace Jump
         private void PauseCheck()
         {
             KeyboardState keyboardState = Keyboard.GetState();
-            // If the player presses P then pause or unpause the game
+            // If the player presses p then pause or unpause the game
             // The is holding down p stops if from pausing and unpausing form one key press being read over mutliple updates
             if (keyboardState.IsKeyDown(Keys.P) && !_isHoldingDownP)
             {
