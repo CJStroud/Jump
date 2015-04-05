@@ -71,6 +71,8 @@ namespace Jump
             _audioManager = new AudioManager(this);
             Components.Add(_audioManager);
 
+            Player.Intialise(_audioManager);
+
             base.Initialize();
         }
 
@@ -245,7 +247,6 @@ namespace Jump
                     else if (reason == CollisionReason.None)
                     {
                         Player.IsGrounded = false;
-                        _audioManager.PlaySoundEffect("boing");
                     }
 
                     Player.Update(gameTime);

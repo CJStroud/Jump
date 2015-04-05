@@ -24,6 +24,8 @@ namespace Jump.Sprites
 
         private Vector2 _startingPosition;
 
+        private AudioManager _audioManager;
+
         public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight) 
             : base(assetName, position, width, height)
         {
@@ -38,6 +40,11 @@ namespace Jump.Sprites
         {
             FrameCount = frameCount;
             TimePerFrame = timePerFrame;
+        }
+
+        public void Intialise(AudioManager audioManager)
+        {
+            _audioManager = audioManager;
         }
 
         public override void Update(GameTime gameTime)
@@ -86,6 +93,7 @@ namespace Jump.Sprites
                 if (keyboard.IsKeyDown(Keys.Space))
                 {
                    VelocityY -= JumpSpeed;
+                    _audioManager.PlaySoundEffect("boing");
                 }
             }
             else
