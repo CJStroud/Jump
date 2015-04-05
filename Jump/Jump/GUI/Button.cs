@@ -20,7 +20,10 @@ namespace Jump.Sprites.GUI
         public bool IsIntersecting { get; protected set; }
         public bool IsClicked { get; set; }
 
-        public Button(string text, SpriteFont font, Vector2 position, Color defaultColour, Color hoverColor)
+        private AudioManager _audioManager;
+        private bool _played = false;
+
+        public Button(string text, SpriteFont font, Vector2 position, Color defaultColour, Color hoverColor, AudioManager audioManager)
         {
             Font = font;
             Text = text;
@@ -30,6 +33,7 @@ namespace Jump.Sprites.GUI
             CurrentColour = DefaultColour;
             Width = (int) font.MeasureString(text).X;
             Height = (int) font.MeasureString(text).Y;
+            _audioManager = audioManager;
         }
 
         public void Update(MouseState mouseState, Camera camera)
@@ -44,11 +48,17 @@ namespace Jump.Sprites.GUI
                 if (mouseState.LeftButton == ButtonState.Pressed)
                 {
                     IsClicked = true;
+                    if (!_played)
+                    {
+                        _audioManager.PlaySoundEffect("click");
+                        _played = true;
+                    }
                 }
             }
             else
             {
                 CurrentColour = DefaultColour;
+                _played = false;
             }
 
 

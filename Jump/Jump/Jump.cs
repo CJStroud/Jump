@@ -91,7 +91,8 @@ namespace Jump
 
             _audioManager.LoadContent();
             _audioManager.LoadSoundEffect("boing", "Sounds/boing");
-            //_audioManager.LoadSong("test", "Songs/Dan Bull - John Lennon");
+            _audioManager.LoadSoundEffect("click", "Sounds/click");
+            _audioManager.LoadSong("background", "Sounds/background");
         }
 
         /// <summary>
@@ -133,15 +134,15 @@ namespace Jump
                     #region main menu
                     if (playerButton == null)
                     {
-                        playerButton = new Button("play", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
+                        playerButton = new Button("play", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
                     }
                     if (scoresButton == null)
                     {
-                        scoresButton = new Button("scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        scoresButton = new Button("scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
                     }
                     if (quitButton == null)
                     {
-                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 375), FontColour, Color.White);
+                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 375), FontColour, Color.White, _audioManager);
                     }
 
                     playerButton.Update(mouseState, Camera);
@@ -156,8 +157,8 @@ namespace Jump
                     {
                         currentGameState = GameState.Scores;
                         _scores = HighScoreManager.GetScores();
-                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
-                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
+                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
                         mouseIsHeld = true;
                     }
                     if (quitButton.IsClicked && !mouseIsHeld)
@@ -232,8 +233,8 @@ namespace Jump
                     {
                         currentGameState = GameState.GameOver;
                         HighScoreManager.SaveScore(_score);
-                        resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
-                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
+                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
                         return;
                     }
                     // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
@@ -283,6 +284,11 @@ namespace Jump
         public void Reset()
         {
             // Reset all of the game components and variables
+            if (_audioManager.IsSongPlaying)
+            {
+                _audioManager.StopSong();
+            }
+            
             _score = 0;
 
             Player.Reset();
@@ -290,6 +296,7 @@ namespace Jump
             Camera.Reset();
             Camera.Position = Player.Position;
             currentGameState = GameState.Playing;
+            _audioManager.PlaySong("background", true);
         }
 
         /// <summary>
