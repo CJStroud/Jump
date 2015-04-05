@@ -338,6 +338,10 @@ namespace Jump
                     {
                         quitButton.Draw(spriteBatch);
                     }
+                    spriteBatch.DrawString(_font, "spacebar = jump", new Vector2(Camera.Left + 515, 275), FontColour, 0,
+                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "p = pause / resume", new Vector2(Camera.Left + 500, 325), FontColour, 0,
+                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
                     break;
                 case GameState.Scores:
                     DrawTitle("scores");
