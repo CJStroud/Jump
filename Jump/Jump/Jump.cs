@@ -40,6 +40,8 @@ namespace Jump
 
         private GameState currentGameState = GameState.MainMenu;
 
+        private AudioManager _audioManager;
+
         public Jump()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -66,6 +68,8 @@ namespace Jump
             Camera = new Camera(GraphicsDevice.Viewport.Bounds);
             
             HighScoreManager.Initialise();
+            _audioManager = new AudioManager(this);
+            Components.Add(_audioManager);
 
             base.Initialize();
         }
@@ -82,6 +86,10 @@ namespace Jump
             Player.LoadContent(Content);
             ChunkManager.LoadContent(Content);
             Camera.Position = Player.Position;
+
+            _audioManager.LoadContent();
+            _audioManager.LoadSoundEffect("boing", "Sounds/boing");
+            //_audioManager.LoadSong("test", "Songs/Dan Bull - John Lennon");
         }
 
         /// <summary>
@@ -100,6 +108,7 @@ namespace Jump
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+
             MouseState mouseState = Mouse.GetState();
 
             if (mouseIsHeld && mouseState.LeftButton == ButtonState.Released)
@@ -236,6 +245,7 @@ namespace Jump
                     else if (reason == CollisionReason.None)
                     {
                         Player.IsGrounded = false;
+                        _audioManager.PlaySoundEffect("boing");
                     }
 
                     Player.Update(gameTime);
