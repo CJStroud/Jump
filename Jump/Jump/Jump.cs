@@ -63,6 +63,8 @@ namespace Jump
 
             Camera = new Camera(GraphicsDevice.Viewport.Bounds);
             
+            HighScoreManager.Initialise();
+
             base.Initialize();
         }
 
@@ -115,7 +117,7 @@ namespace Jump
             switch (currentGameState)
             {
                 case GameState.MainMenu:
-
+                    #region main menu
                     if (playerButton == null)
                     {
                         playerButton = new Button("play", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
@@ -151,12 +153,13 @@ namespace Jump
                         Exit();
                     }
                     break;
-
+                    #endregion
                 case GameState.Scores:
                         
                     break;
 
                 case GameState.GameOver:
+                    #region gameover
                     resetButton.Update(mouseState, Camera);
                     mainMenuButton.Update(mouseState, Camera);
                     if (resetButton.IsClicked)
@@ -171,12 +174,13 @@ namespace Jump
                         mouseIsHeld = true;
                     }
                     break;
-
+                    #endregion
                 case GameState.Paused:
                     PauseCheck();
                     break;
 
                 case GameState.Playing:
+                    #region playing
                     IsMouseVisible = false;
                     PauseCheck();
                     // if the game is paused then do not do any updates
@@ -201,6 +205,7 @@ namespace Jump
                     else if (reason == CollisionReason.HitObstacle || Player.Y > 700)
                     {
                         currentGameState = GameState.GameOver;
+                        HighScoreManager.SaveScore(_score);
                         resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
                         mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
                     }
@@ -224,7 +229,7 @@ namespace Jump
 
 
                     base.Update(gameTime);
-
+                    #endregion
                     break;
 
             }
@@ -275,23 +280,26 @@ namespace Jump
             {
                 case GameState.MainMenu:
                     spriteBatch.DrawString(_font, "jump", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
+                        Vector2.Zero, 2f, SpriteEffects.None, 0);
                     playerButton.Draw(spriteBatch);
                     scoresButton.Draw(spriteBatch);
                     quitButton.Draw(spriteBatch);
+                    break;
+                case GameState.Scores:
+
                     break;
                 case GameState.GameOver:
                     resetButton.Draw(spriteBatch);
                     mainMenuButton.Draw(spriteBatch);
                     spriteBatch.DrawString(_font, "game over", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
+                        Vector2.Zero, 2f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
                     Player.Draw(spriteBatch);
                     break;
                 case GameState.Paused:
                     spriteBatch.DrawString(_font, "paused", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
+                        Vector2.Zero, 2f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
                         Vector2.Zero, 0.85f, SpriteEffects.None, 0);
                     Player.Draw(spriteBatch);
