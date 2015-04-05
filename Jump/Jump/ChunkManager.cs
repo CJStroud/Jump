@@ -70,7 +70,7 @@ namespace Jump
         public Chunk LastIntersection { get; private set; }
 
         private ContentManager _content;
-
+        private AudioManager _audioManager;
         private Rectangle _startingViewport;
 
         public int ChunkY = 500;
@@ -82,10 +82,11 @@ namespace Jump
             _startingViewport = viewport;
         }
 
-        public void LoadContent(ContentManager content)
+        public void LoadContent(ContentManager content, AudioManager audioManager)
         {
             _content = content;
             GenerateDefault();
+            _audioManager = audioManager;
         }
 
         public void Update(int leftOfScreen, int rightOfScreen)
@@ -218,6 +219,7 @@ namespace Jump
             {
                 if (chunk.Obstacle != null && playerBoundingBox.Intersects(chunk.Obstacle.BoundingBox))
                 {
+                    _audioManager.PlaySoundEffect("scream");
                     return CollisionReason.HitObstacle;
                 }
                 if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
@@ -262,6 +264,7 @@ namespace Jump
                     {
                         return CollisionReason.Gravity;
                     }
+                    _audioManager.PlaySoundEffect("scream");
                     return CollisionReason.HitBuilding;
                 }
 

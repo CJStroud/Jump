@@ -69,6 +69,7 @@ namespace Jump
             
             HighScoreManager.Initialise();
             _audioManager = new AudioManager(this);
+            _audioManager.MusicVolume = 0.2f;
             Components.Add(_audioManager);
 
             Player.Intialise(_audioManager);
@@ -86,12 +87,13 @@ namespace Jump
             spriteBatch = new SpriteBatch(GraphicsDevice);
             _font = Content.Load<SpriteFont>("zekton free");
             Player.LoadContent(Content);
-            ChunkManager.LoadContent(Content);
+            ChunkManager.LoadContent(Content, _audioManager);
             Camera.Position = Player.Position;
 
             _audioManager.LoadContent();
-            _audioManager.LoadSoundEffect("boing", "Sounds/boing");
+            _audioManager.LoadSoundEffect("boing", "Sounds/boing2");
             _audioManager.LoadSoundEffect("click", "Sounds/click");
+            _audioManager.LoadSoundEffect("scream", "Sounds/scream");
             _audioManager.LoadSong("background", "Sounds/background");
         }
 
@@ -152,6 +154,7 @@ namespace Jump
                     if (playerButton.IsClicked && !mouseIsHeld)
                     {
                         Reset();
+                        _audioManager.PlaySong("background", true);
                     }
                     if (scoresButton.IsClicked && !mouseIsHeld)
                     {
@@ -192,6 +195,8 @@ namespace Jump
                     if (resetButton.IsClicked)
                     {
                         Reset();
+                        _audioManager.PlaySong("background", true);
+
                     }
                     else if (mainMenuButton.IsClicked)
                     {
@@ -235,6 +240,7 @@ namespace Jump
                         HighScoreManager.SaveScore(_score);
                         resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
                         mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
+                        _audioManager.StopSong();
                         return;
                     }
                     // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
@@ -296,7 +302,6 @@ namespace Jump
             Camera.Reset();
             Camera.Position = Player.Position;
             currentGameState = GameState.Playing;
-            _audioManager.PlaySong("background", true);
         }
 
         /// <summary>
@@ -368,5 +373,6 @@ namespace Jump
             spriteBatch.DrawString(_font, text, new Vector2(Camera.Left + 350, 150), FontColour, 0,
                 Vector2.Zero, 2f, SpriteEffects.None, 0);
         }
+
     }
 }
