@@ -34,6 +34,8 @@ namespace Jump.Sprites.GUI
 
         public void Update(MouseState mouseState, Camera camera)
         {
+            IsClicked = false;
+
             Rectangle mouseBounds = new Rectangle((int)camera.Left + mouseState.X, camera.Top + mouseState.Y, 1, 1);
             if (mouseBounds.Intersects(BoundingBox))
             {
@@ -48,9 +50,11 @@ namespace Jump.Sprites.GUI
             {
                 CurrentColour = DefaultColour;
             }
+
+
         }
 
-        public void Draw(SpriteBatch spritebatch, GraphicsDevice graphicsDevice)
+        public void Draw(SpriteBatch spritebatch)
         {
             spritebatch.DrawString(Font, Text, Position, CurrentColour);
             

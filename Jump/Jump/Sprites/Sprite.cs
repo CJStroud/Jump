@@ -50,6 +50,8 @@ namespace Jump.Sprites
         public float Scale { get; set; }
         public float LayerDepth { get; set; }
 
+        public bool Hidden { get; set; }
+
         /// <summary>
         /// Returns the rectangle that degins the area of the screen to draw the sprite
         /// </summary>
@@ -76,6 +78,10 @@ namespace Jump.Sprites
             if (Texture == null)
             {
                 throw new NullReferenceException("The texture is null! Make sure that LoadContent has been called before drawing.");
+            }
+            if (Hidden)
+            {
+                return;
             }
 
             // Draws the Sprite to the spritebatch. We use null as the source rectangle so it uses the entire texture.

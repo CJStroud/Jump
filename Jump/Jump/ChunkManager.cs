@@ -195,7 +195,7 @@ namespace Jump
 
         public void GenerateDefault()
         {
-            while (_startingViewport.Right + _defaultChunkWidth > Right)
+            while (_startingViewport.Right + _defaultChunkWidth*2 > Right)
             {
                 GenerateNext(true);
             } 

@@ -110,7 +110,7 @@ namespace Jump.Sprites
 
         public void Reset()
         {
-            VelocityX = 0;
+            Velocity = Vector2.Zero;
             Position = _startingPosition;
             IsGrounded = false;
         }
