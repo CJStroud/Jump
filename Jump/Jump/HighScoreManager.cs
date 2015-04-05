@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace Jump
 {
@@ -44,10 +45,11 @@ namespace Jump
         {
             List<int> scores = GetScores();
 
-            int timesToLoop = scores.Count;
+            int timesToLoop = scores.Count <= 5 ? scores.Count : 5;
             scores.Add(score);
 
             scores.Sort();
+            scores.Reverse();
 
             using (StreamWriter writer = new StreamWriter(FilePath))
             {

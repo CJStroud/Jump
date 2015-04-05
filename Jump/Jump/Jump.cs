@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Jump.Sprites;
 using Jump.Sprites.GUI;
 using Microsoft.Xna.Framework;
@@ -32,9 +33,10 @@ namespace Jump
         private Button playerButton;
         private Button scoresButton;
         private Button quitButton;
-        private Button backButton;
 
         private bool mouseIsHeld;
+
+        private List<int> _scores; 
 
         private GameState currentGameState = GameState.MainMenu;
 
@@ -124,7 +126,7 @@ namespace Jump
                     }
                     if (scoresButton == null)
                     {
-                        scoresButton = new Button("high scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        scoresButton = new Button("scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
                     }
                     if (quitButton == null)
                     {
@@ -135,27 +137,40 @@ namespace Jump
                     scoresButton.Update(mouseState, Camera);
                     quitButton.Update(mouseState, Camera);
 
-                    if (mouseIsHeld)
-                    {
-                        return;
-                    }
-
-                    if (playerButton.IsClicked)
+                    if (playerButton.IsClicked && !mouseIsHeld)
                     {
                         Reset();
                     }
-                    if (scoresButton.IsClicked)
+                    if (scoresButton.IsClicked && !mouseIsHeld)
                     {
                         currentGameState = GameState.Scores;
+                        _scores = HighScoreManager.GetScores();
+                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
+                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        mouseIsHeld = true;
                     }
-                    if (quitButton.IsClicked)
+                    if (quitButton.IsClicked && !mouseIsHeld)
                     {
                         Exit();
                     }
                     break;
                     #endregion
                 case GameState.Scores:
-                        
+                    quitButton.Update(mouseState, Camera);
+                    mainMenuButton.Update(mouseState, Camera);
+
+                    if (quitButton.IsClicked && !mouseIsHeld)
+                    {
+                        Exit();
+                    }
+                    else if (mainMenuButton.IsClicked && !mouseIsHeld)
+                    {
+                        // Show main menu
+                        Reset();
+                        currentGameState = GameState.MainMenu;
+                        mouseIsHeld = true;
+                        quitButton = null;
+                    }
                     break;
 
                 case GameState.GameOver:
@@ -280,27 +295,39 @@ namespace Jump
             switch (currentGameState)
             {
                 case GameState.MainMenu:
-                    spriteBatch.DrawString(_font, "jump", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    DrawTitle("jump");
                     playerButton.Draw(spriteBatch);
                     scoresButton.Draw(spriteBatch);
-                    quitButton.Draw(spriteBatch);
+                    if (quitButton != null)
+                    {
+                        quitButton.Draw(spriteBatch);
+                    }
                     break;
                 case GameState.Scores:
-
+                    DrawTitle("scores");
+                    mainMenuButton.Draw(spriteBatch);
+                    quitButton.Draw(spriteBatch);
+                    spriteBatch.DrawString(_font, "#1: " + (_scores.Count > 0 ? _scores[0].ToString() : "-"), new Vector2(Camera.Left + 500, 275), FontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "#2: " + (_scores.Count > 1 ? _scores[1].ToString() : "-"), new Vector2(Camera.Left + 500, 325), FontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "#3: " + (_scores.Count > 2 ? _scores[2].ToString() : "-"), new Vector2(Camera.Left + 500, 375), FontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "#4: " + (_scores.Count > 3 ? _scores[3].ToString() : "-"), new Vector2(Camera.Left + 700, 275), FontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "#5: " + (_scores.Count > 4 ? _scores[4].ToString() : "-"), new Vector2(Camera.Left + 700, 325), FontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
                     break;
                 case GameState.GameOver:
                     resetButton.Draw(spriteBatch);
                     mainMenuButton.Draw(spriteBatch);
-                    spriteBatch.DrawString(_font, "game over", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    DrawTitle("gameover");
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
                     Player.Draw(spriteBatch);
                     break;
                 case GameState.Paused:
-                    spriteBatch.DrawString(_font, "paused", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 2f, SpriteEffects.None, 0);
+                    DrawTitle("paused");
                     spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
                         Vector2.Zero, 0.85f, SpriteEffects.None, 0);
                     Player.Draw(spriteBatch);
@@ -316,6 +343,12 @@ namespace Jump
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        public void DrawTitle(string text)
+        {
+            spriteBatch.DrawString(_font, text, new Vector2(Camera.Left + 350, 150), FontColour, 0,
+                Vector2.Zero, 2f, SpriteEffects.None, 0);
         }
     }
 }
