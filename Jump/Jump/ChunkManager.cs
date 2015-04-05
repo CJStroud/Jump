@@ -219,7 +219,7 @@ namespace Jump
             {
                 if (chunk.Obstacle != null && playerBoundingBox.Intersects(chunk.Obstacle.BoundingBox))
                 {
-                    _audioManager.PlaySoundEffect("scream");
+                    _audioManager.PlaySoundEffect("death");
                     return CollisionReason.HitObstacle;
                 }
                 if (playerBoundingBox.Intersects(chunk.BoundingBox) && chunk.IsCollidable)
@@ -264,7 +264,7 @@ namespace Jump
                     {
                         return CollisionReason.Gravity;
                     }
-                    _audioManager.PlaySoundEffect("scream");
+                    _audioManager.PlaySoundEffect("death");
                     return CollisionReason.HitBuilding;
                 }
 

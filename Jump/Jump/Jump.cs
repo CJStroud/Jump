@@ -94,7 +94,7 @@ namespace Jump
             _audioManager.LoadContent();
             _audioManager.LoadSoundEffect("jump", "Sounds/jump");
             _audioManager.LoadSoundEffect("click", "Sounds/click");
-            _audioManager.LoadSoundEffect("scream", "Sounds/scream");
+            _audioManager.LoadSoundEffect("death", "Sounds/death");
             _audioManager.LoadSong("background", "Sounds/background");
         }
 
