@@ -32,6 +32,7 @@ namespace Jump
         private Button playerButton;
         private Button scoresButton;
         private Button quitButton;
+        private Button backButton;
 
         private bool mouseIsHeld;
 
@@ -116,25 +117,46 @@ namespace Jump
                 case GameState.MainMenu:
 
                     if (playerButton == null)
+                    {
                         playerButton = new Button("play", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
+                    }
+                    if (scoresButton == null)
+                    {
+                        scoresButton = new Button("high scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                    }
+                    if (quitButton == null)
+                    {
+                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 375), FontColour, Color.White);
+                    }
 
                     playerButton.Update(mouseState, Camera);
+                    scoresButton.Update(mouseState, Camera);
+                    quitButton.Update(mouseState, Camera);
+
                     if (mouseIsHeld)
                     {
                         return;
                     }
+
                     if (playerButton.IsClicked)
                     {
                         Reset();
                     }
+                    if (scoresButton.IsClicked)
+                    {
+                        currentGameState = GameState.Scores;
+                    }
+                    if (quitButton.IsClicked)
+                    {
+                        Exit();
+                    }
                     break;
 
                 case GameState.Scores:
-
+                        
                     break;
 
                 case GameState.GameOver:
-
                     resetButton.Update(mouseState, Camera);
                     mainMenuButton.Update(mouseState, Camera);
                     if (resetButton.IsClicked)
@@ -253,21 +275,23 @@ namespace Jump
             {
                 case GameState.MainMenu:
                     spriteBatch.DrawString(_font, "jump", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
                     playerButton.Draw(spriteBatch);
+                    scoresButton.Draw(spriteBatch);
+                    quitButton.Draw(spriteBatch);
                     break;
                 case GameState.GameOver:
                     resetButton.Draw(spriteBatch);
                     mainMenuButton.Draw(spriteBatch);
                     spriteBatch.DrawString(_font, "game over", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
                     Player.Draw(spriteBatch);
                     break;
                 case GameState.Paused:
                     spriteBatch.DrawString(_font, "paused", new Vector2(Camera.Left + 350, 150), FontColour, 0,
-                        Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+                        Vector2.Zero, 1.8f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
                         Vector2.Zero, 0.85f, SpriteEffects.None, 0);
                     Player.Draw(spriteBatch);

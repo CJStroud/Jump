@@ -4,7 +4,7 @@ namespace Jump
 {
     public class Camera
     {
-        public Matrix ViewMatrix;
+        public static Matrix ViewMatrix;
         private Vector2 _position;
         private Vector2 _halfViewSize;
 
