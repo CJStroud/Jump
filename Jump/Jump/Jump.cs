@@ -208,6 +208,7 @@ namespace Jump
                         HighScoreManager.SaveScore(_score);
                         resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
                         mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
+                        return;
                     }
                     // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
                     else if (reason == CollisionReason.HitBuilding)
