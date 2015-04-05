@@ -22,11 +22,14 @@ namespace Jump.Sprites
         public float MaxSpeed = 5.0f;
         public float JumpSpeed = 6.0f;
 
+        private Vector2 _startingPosition;
+
         public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight) 
             : base(assetName, position, width, height)
         {
             TextureWidth = textureWidth;
             TextureHeight = textureHeight;
+            _startingPosition = position;
         }
 
         public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight,
@@ -105,13 +108,10 @@ namespace Jump.Sprites
             base.Update(gameTime);
         }
 
-
         public void Reset()
         {
             VelocityX = 0;
-            X += 60;
-            Y = 250;
-            Position = new Vector2(400, 0);
+            Position = _startingPosition;
             IsGrounded = false;
         }
     }

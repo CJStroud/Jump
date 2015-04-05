@@ -1,7 +1,5 @@
-using System.Security.Cryptography;
 using Jump.Sprites;
-using Jump.Sprites.Chunks;
-using Jump.Sprites.Obstacles;
+using Jump.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -25,9 +23,14 @@ namespace Jump
         private bool _gameIsPaused;
         private bool _isHoldingDownP;
 
-        private SpriteFont _scoreFont;
+        private SpriteFont _font;
 
         private int _score;
+
+        private Button resetButton;
+        private Button mainMenuButton;
+
+        private GameState currentGameState;
 
         public Jump()
         {
@@ -45,15 +48,15 @@ namespace Jump
         {
             // set font colour
             FontColour = new Color(10, 53, 83);
-            
+
             // Create a new player object starting at X 100 and Y 100
-            Player = new Player("Player", new Vector2(400, 0), 20, 38, 50, 50, 4, 0.1f);
+            Player = new Player("Player", new Vector2(400, 200), 20, 38, 50, 50, 4, 0.1f);
             ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Bounds);
             ChunkManager.HoleSpawnChance = 0.35f;
             ChunkManager.ObstacleSpawnChance = 0.35f;
 
             Camera = new Camera(GraphicsDevice.Viewport.Bounds);
-
+            
             base.Initialize();
         }
 
@@ -65,8 +68,7 @@ namespace Jump
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            _scoreFont = Content.Load<SpriteFont>("zekton free");
-
+            _font = Content.Load<SpriteFont>("zekton free");
             Player.LoadContent(Content);
             ChunkManager.LoadContent(Content);
         }
@@ -87,12 +89,34 @@ namespace Jump
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            IsMouseVisible = true;
             KeyboardState keyboardState = Keyboard.GetState();
 
             // If the player presses escape, close the game
             if (keyboardState.IsKeyDown(Keys.Escape))
             {
                 Exit();
+            }
+
+            switch (currentGameState)
+            {
+                case GameState.GameOver:
+                    resetButton.Update(Mouse.GetState(), Camera);
+                    mainMenuButton.Update(Mouse.GetState(), Camera);
+                    if (resetButton.IsClicked)
+                    {
+                        Reset();
+                    }
+                    else if (mainMenuButton.IsClicked)
+                    {
+                        // Show main menu
+                        Exit();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                    break;
             }
 
             // If the player presses P then pause or unpause the game
@@ -128,7 +152,9 @@ namespace Jump
             // if the reason is that the player hit an obstacle or fell off a building then reset the game
             else if (reason == CollisionReason.HitObstacle || Player.Y > 700)
             {
-                Reset();   
+                currentGameState = GameState.GameOver;
+                resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White);
+                mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White);
             }
             // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
             else if (reason == CollisionReason.HitBuilding)
@@ -147,8 +173,8 @@ namespace Jump
             Camera.Position = Player.Position;
 
             _score += (int)Player.VelocityX;
-            
 
+            
             base.Update(gameTime);
         }
 
@@ -160,6 +186,7 @@ namespace Jump
             Player.Reset();
             ChunkManager.Reset();
             Camera.Reset();
+            currentGameState = GameState.Playing;
         }
 
         /// <summary>
@@ -172,7 +199,18 @@ namespace Jump
 
             // Draw the game components in relation to the camera
             spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
-            spriteBatch.DrawString(_scoreFont, "score : " + _score, new Vector2(Camera.Left + 210, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
+
+            switch (currentGameState)
+            {
+                case GameState.GameOver:
+                    resetButton.Draw(spriteBatch, GraphicsDevice);
+                    mainMenuButton.Draw(spriteBatch, GraphicsDevice);
+                    spriteBatch.DrawString(_font, "game over", new Vector2(Camera.Left + 350, 150), FontColour, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
+                    spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
+                    break;
+            }
+            spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
             Player.Draw(spriteBatch);
             ChunkManager.Draw(spriteBatch);
             spriteBatch.End();

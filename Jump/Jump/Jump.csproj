@@ -74,10 +74,12 @@
   <ItemGroup>
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionReason.cs" />
+    <Compile Include="GameState.cs" />
     <Compile Include="Sprites\Chunks\Chunk.cs" />
     <Compile Include="ChunkManager.cs" />
     <Compile Include="Sprites\Chunks\HoleChunk.cs" />
     <Compile Include="IAnimated.cs" />
+    <Compile Include="Sprites\GUI\Button.cs" />
     <Compile Include="Sprites\Obstacles\Antenna.cs" />
     <Compile Include="Sprites\Obstacles\Fan.cs" />
     <Compile Include="Sprites\Obstacles\Obstacle.cs" />

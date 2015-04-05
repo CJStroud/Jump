@@ -12,9 +12,11 @@ namespace Jump
 
         private int _yToFollow = 463;
 
-        public int Left { get { return (int)(Position.X -_halfViewSize.X); } }
+        public int Top { get { return 132; } }
 
-        public int Right { get { return (int)(Position.X + _halfViewSize.X*2); } }
+        public int Left { get { return (int)(Position.X -_halfViewSize.X + 202); } }
+
+        public int Right { get { return (int)(Position.X + _halfViewSize.X*2 + 200); } }
 
         public Camera(Rectangle clientRect)
         {
