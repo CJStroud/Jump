@@ -281,12 +281,24 @@ namespace Jump
                 _isHoldingDownP = true;
                 _gameIsPaused = !_gameIsPaused;
                 currentGameState = _gameIsPaused ? GameState.Paused : GameState.Playing;
+
+                if (_audioManager.IsSongPlaying && _gameIsPaused)
+                {
+                    _audioManager.PauseSong();
+                }
+                if (_audioManager.IsSongPaused && !_gameIsPaused)
+                {
+                    _audioManager.ResumeSong();
+                }
             }
+
             else if (!keyboardState.IsKeyDown(Keys.P))
             {
                 _isHoldingDownP = false;
             }
         }
+
+
 
         public void Reset()
         {
