@@ -70,6 +70,7 @@ namespace Jump
             HighScoreManager.Initialise();
             _audioManager = new AudioManager(this);
             _audioManager.MusicVolume = 0.2f;
+            _audioManager.SoundEffectVolume = 0.4f;
             Components.Add(_audioManager);
 
             Player.Intialise(_audioManager);
@@ -344,7 +345,7 @@ namespace Jump
                 case GameState.GameOver:
                     resetButton.Draw(spriteBatch);
                     mainMenuButton.Draw(spriteBatch);
-                    DrawTitle("gameover");
+                    DrawTitle("game over");
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
                     Player.Draw(spriteBatch);
