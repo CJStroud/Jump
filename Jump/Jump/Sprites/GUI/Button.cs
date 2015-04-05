@@ -13,7 +13,7 @@ namespace Jump.Sprites.GUI
         public Vector2 Position { get; protected set; }
         public int Width { get; protected set; }
         public int Height { get; protected set; }
-        public Rectangle BoundingBox { get { return new Rectangle((int)Position.X - 40, (int)Position.Y, Width, Height);} }
+        public Rectangle BoundingBox { get { return new Rectangle((int)Position.X - 40, (int)Position.Y - 20, Width, Height);} }
         public Color DefaultColour { get; protected set; }
         public Color HoverColour { get; protected set; }
         public Color CurrentColour { get; protected set; }
@@ -52,7 +52,7 @@ namespace Jump.Sprites.GUI
 
         public void Draw(SpriteBatch spritebatch, GraphicsDevice graphicsDevice)
         {
-            spritebatch.DrawString(Font, Text, Position, CurrentColour, 0, Vector2.Zero, 0.9f, SpriteEffects.None, 0);
+            spritebatch.DrawString(Font, Text, Position, CurrentColour);
             
         }
     }

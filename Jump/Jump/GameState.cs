@@ -5,6 +5,7 @@
         MainMenu,
         Scores,
         Playing,
+        Paused,
         GameOver
     }
 }

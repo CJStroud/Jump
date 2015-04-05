@@ -89,7 +89,7 @@ namespace Jump
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            IsMouseVisible = true;
+            
             KeyboardState keyboardState = Keyboard.GetState();
 
             // If the player presses escape, close the game
@@ -101,6 +101,8 @@ namespace Jump
             switch (currentGameState)
             {
                 case GameState.GameOver:
+
+                    IsMouseVisible = true;
                     resetButton.Update(Mouse.GetState(), Camera);
                     mainMenuButton.Update(Mouse.GetState(), Camera);
                     if (resetButton.IsClicked)
@@ -117,6 +119,11 @@ namespace Jump
                         return;
                     }
                     break;
+                
+                case GameState.Playing:
+                    IsMouseVisible = false;
+                    break;
+
             }
 
             // If the player presses P then pause or unpause the game
@@ -125,6 +132,7 @@ namespace Jump
             {
                 _isHoldingDownP = true;
                 _gameIsPaused = !_gameIsPaused;
+                currentGameState = _gameIsPaused ? GameState.Paused : GameState.Playing;
             }
             else if (!keyboardState.IsKeyDown(Keys.P))
             {
@@ -208,6 +216,9 @@ namespace Jump
                     spriteBatch.DrawString(_font, "game over", new Vector2(Camera.Left + 350, 150), FontColour, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
+                    break;
+                case GameState.Paused:
+                    spriteBatch.DrawString(_font, "paused", new Vector2(Camera.Left + 350, 150), FontColour, 0, Vector2.Zero, 1.5f, SpriteEffects.None, 0);
                     break;
             }
             spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0, Vector2.Zero, 0.85f, SpriteEffects.None, 0);
