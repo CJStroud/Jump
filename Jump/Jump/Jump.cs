@@ -128,9 +128,11 @@ namespace Jump
                         Reset();
                     }
                     break;
+
                 case GameState.Scores:
 
                     break;
+
                 case GameState.GameOver:
 
                     resetButton.Update(mouseState, Camera);
@@ -147,9 +149,11 @@ namespace Jump
                         mouseIsHeld = true;
                     }
                     break;
+
                 case GameState.Paused:
                     PauseCheck();
                     break;
+
                 case GameState.Playing:
                     IsMouseVisible = false;
                     PauseCheck();
@@ -259,10 +263,14 @@ namespace Jump
                         Vector2.Zero, 1.5f, SpriteEffects.None, 0);
                     spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
                     spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
+                    Player.Draw(spriteBatch);
                     break;
                 case GameState.Paused:
                     spriteBatch.DrawString(_font, "paused", new Vector2(Camera.Left + 350, 150), FontColour, 0,
                         Vector2.Zero, 1.5f, SpriteEffects.None, 0);
+                    spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
+                        Vector2.Zero, 0.85f, SpriteEffects.None, 0);
+                    Player.Draw(spriteBatch);
                     break;
                 case GameState.Playing:
                     spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
