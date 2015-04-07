@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -12,10 +11,7 @@ namespace Jump
         #region Constructor
 
         public AudioManager(Game game)
-            : base(game)
-        {
-
-        }
+            : base(game) { }
 
         #endregion
 
@@ -61,6 +57,7 @@ namespace Jump
 
         public override void Update(GameTime gameTime)
         {
+            // Clear up any sounds that have stopped playing
             for (int i = 0; i < _soundEffectsBeingPlayed.Length; i++)
             {
                 if (_soundEffectsBeingPlayed[i] != null && _soundEffectsBeingPlayed[i].State == SoundState.Stopped)
@@ -70,6 +67,7 @@ namespace Jump
                 }
             }
 
+            // Clean up song when it stops
             if (_currentSong != null && MediaPlayer.State == MediaState.Stopped)
             {
                 _currentSong = null;
@@ -84,20 +82,17 @@ namespace Jump
 
         #region Public Methods
 
-        public void LoadContent()
+        public void LoadContent(string contentFolder = null)
         {
-            LoadContent(string.Empty);
-        }
-
-        public void LoadContent(string contentFolder)
-        {
-            _content = contentFolder != String.Empty
+            // Load content folder
+            _content = contentFolder != null
                 ? new ContentManager(Game.Content.ServiceProvider, Game.Content.RootDirectory + "\\" + contentFolder)
                 : new ContentManager(Game.Content.ServiceProvider, Game.Content.RootDirectory);
         }
 
         public void LoadSoundEffect(string soundName, string soundPath)
         {
+            // Add sound effect to audio manager
             if (_soundEffects.ContainsKey(soundName)) return;
 
             _soundEffects.Add(soundName, _content.Load<SoundEffect>(soundPath));
@@ -105,6 +100,7 @@ namespace Jump
 
         public void PlaySoundEffect(string soundName)
         {
+            // Play sound effect
             SoundEffect soundEffect;
             _soundEffects.TryGetValue(soundName, out soundEffect);
 
@@ -121,6 +117,7 @@ namespace Jump
 
         public void LoadSong(string songName, string songPath)
         {
+            // Add a song to the audio manager
             if (_soundEffects.ContainsKey(songName)) return;
 
             _songs.Add(songName, _content.Load<Song>(songPath));
@@ -128,6 +125,7 @@ namespace Jump
 
         public void PlaySong(string songName, bool isRepeating)
         {
+            // Play the song specified
             Song song;
             if (!_songs.TryGetValue(songName, out song) || song == null) return;
 
@@ -144,6 +142,7 @@ namespace Jump
 
         public void PauseSong()
         {
+            // Pause the song, if one is playing
             if (_isSongPlaying && !_isSongPaused)
             {
                 MediaPlayer.Pause();
@@ -154,6 +153,7 @@ namespace Jump
 
         public void ResumeSong()
         {
+            // Resume the song, if it has been paused
             if (_isSongPaused)
             {
                 MediaPlayer.Resume();
@@ -164,11 +164,11 @@ namespace Jump
 
         public void StopSong()
         {
+            // Stop the song that is playing
             MediaPlayer.Stop();
             _currentSong = null;
             CurrentSong = null;
         }
-
 
         #endregion
 
@@ -176,6 +176,7 @@ namespace Jump
 
         private int GetAvailableIndex()
         {
+            // Get the next available index from the sound effects being played array
             for (int i = 0; i < _soundEffectsBeingPlayed.Length; i++)
             {
                 if (_soundEffectsBeingPlayed[i] == null)

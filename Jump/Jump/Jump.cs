@@ -1,6 +1,6 @@
 using System.Collections.Generic;
+using Jump.GUI;
 using Jump.Sprites;
-using Jump.Sprites.GUI;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -8,45 +8,46 @@ using Microsoft.Xna.Framework.Input;
 namespace Jump
 {
     /// <summary>
-    /// This is the main type for your game
+    /// Main game class
     /// </summary>
     public class Jump : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
+        #region Private Fields
 
-        public Color FontColour;
-
-        public Player Player;
-        public Camera Camera;
-        public ChunkManager ChunkManager;
-
+        private GraphicsDeviceManager _graphics;
+        private SpriteBatch _spriteBatch;
+        private Color _fontColour;
+        private Player _player;
+        private Camera _camera;
+        private ChunkManager _chunkManager;
         private bool _gameIsPaused;
         private bool _isHoldingDownP;
-
         private SpriteFont _font;
-
         private int _score;
-
-        private Button resetButton;
-        private Button mainMenuButton;
-        private Button playerButton;
-        private Button scoresButton;
-        private Button quitButton;
-
-        private bool mouseIsHeld;
-
+        private Button _resetButton;
+        private Button _mainMenuButton;
+        private Button _playerButton;
+        private Button _scoresButton;
+        private Button _quitButton;
+        private bool _mouseIsHeld;
         private List<int> _scores; 
-
-        private GameState currentGameState = GameState.MainMenu;
-
+        private GameState _currentGameState = GameState.MainMenu;
         private AudioManager _audioManager;
+
+        #endregion
+
+        #region Constructor
 
         public Jump()
         {
-            graphics = new GraphicsDeviceManager(this);
+            // Do not remove _graphics or GraphicsDevice will throw an exception.
+            _graphics =  new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
         }
+
+        #endregion
+
+        #region Override Methods
 
         /// <summary>
         /// Allows the game to perform any initialization it needs to before starting to run.
@@ -57,23 +58,28 @@ namespace Jump
         protected override void Initialize()
         {
             // set font colour
-            FontColour = new Color(10, 53, 83);
+            _fontColour = new Color(10, 53, 83);
 
-            // Create a new player object starting at X 100 and Y 100
-            Player = new Player("Player", new Vector2(400, 200), 20, 38, 50, 50, 4, 0.1f);
-            ChunkManager = new ChunkManager(GraphicsDevice.Viewport.Bounds);
-            ChunkManager.HoleSpawnChance = 0.35f;
-            ChunkManager.ObstacleSpawnChance = 0.35f;
+            // Create chunk manager
+            _chunkManager = new ChunkManager(GraphicsDevice.Viewport.Bounds)
+            {
+                HoleSpawnChance = 0.35f,
+                ObstacleSpawnChance = 0.35f
+            };
 
-            Camera = new Camera(GraphicsDevice.Viewport.Bounds);
+            // Create camera
+            _camera = new Camera(GraphicsDevice.Viewport.Bounds);
             
+            // Setup highscore manager
             HighScoreManager.Initialise();
-            _audioManager = new AudioManager(this);
-            _audioManager.MusicVolume = 0.05f;
-            _audioManager.SoundEffectVolume = 0.2f;
+
+            // Create Audio Manager
+            _audioManager = new AudioManager(this) { MusicVolume = 0.2f, SoundEffectVolume = 0.4f };
             Components.Add(_audioManager);
 
-            Player.Intialise(_audioManager);
+            // Create a new player object starting at X 400 and Y 200
+            _player = new Player("Player", new Vector2(400, 200), 20, 38, 50, 50, 4, 0.1f);
+            _player.Intialise(_audioManager);
 
             base.Initialize();
         }
@@ -84,27 +90,24 @@ namespace Jump
         /// </summary>
         protected override void LoadContent()
         {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            _font = Content.Load<SpriteFont>("zekton free");
-            Player.LoadContent(Content);
-            ChunkManager.LoadContent(Content, _audioManager);
-            Camera.Position = Player.Position;
 
+            // Create a new SpriteBatch, which can be used to draw textures.
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+            _font = Content.Load<SpriteFont>("zekton free");
+            _player.LoadContent(Content);
+            _chunkManager.LoadContent(Content, _audioManager);
+            _camera.Position = _player.Position;
+
+            #region Audio
+
+            // Load the audio files into the audio manager
             _audioManager.LoadContent();
             _audioManager.LoadSoundEffect("jump", "Sounds/jump");
             _audioManager.LoadSoundEffect("click", "Sounds/click");
             _audioManager.LoadSoundEffect("death", "Sounds/death");
             _audioManager.LoadSong("background", "Sounds/background");
-        }
 
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
+            #endregion
         }
 
         /// <summary>
@@ -114,12 +117,12 @@ namespace Jump
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-
             MouseState mouseState = Mouse.GetState();
 
-            if (mouseIsHeld && mouseState.LeftButton == ButtonState.Released)
+            // Check if mouse is being held so that a player does not accidently click a button when it is shown, before letting go of the mouse button
+            if (_mouseIsHeld && mouseState.LeftButton == ButtonState.Released)
             {
-                mouseIsHeld = false;
+                _mouseIsHeld = false;
             }
 
             IsMouseVisible = true;
@@ -131,89 +134,71 @@ namespace Jump
                 Exit();
             }
 
-            switch (currentGameState)
+            switch (_currentGameState)
             {
+                #region Main Menu
                 case GameState.MainMenu:
-                    #region main menu
-                    if (playerButton == null)
+                    
+                    if (_playerButton == null)
                     {
-                        playerButton = new Button("play", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
+                        _playerButton = new Button("play", _font, new Vector2(_camera.Left + 210, 275), _fontColour, Color.White, _audioManager);
                     }
-                    if (scoresButton == null)
+                    if (_scoresButton == null)
                     {
-                        scoresButton = new Button("scores", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
+                        _scoresButton = new Button("scores", _font, new Vector2(_camera.Left + 210, 325), _fontColour, Color.White, _audioManager);
                     }
-                    if (quitButton == null)
+                    if (_quitButton == null)
                     {
-                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 375), FontColour, Color.White, _audioManager);
+                        _quitButton = new Button("quit", _font, new Vector2(_camera.Left + 210, 375), _fontColour, Color.White, _audioManager);
                     }
 
-                    playerButton.Update(mouseState, Camera);
-                    scoresButton.Update(mouseState, Camera);
-                    quitButton.Update(mouseState, Camera);
+                    _playerButton.Update(mouseState, _camera);
+                    _scoresButton.Update(mouseState, _camera);
+                    _quitButton.Update(mouseState, _camera);
 
-                    if (playerButton.IsClicked && !mouseIsHeld)
+                    if (_playerButton.IsClicked && !_mouseIsHeld)
                     {
                         Reset();
                         _audioManager.PlaySong("background", true);
                     }
-                    if (scoresButton.IsClicked && !mouseIsHeld)
+                    if (_scoresButton.IsClicked && !_mouseIsHeld)
                     {
-                        currentGameState = GameState.Scores;
+                        _currentGameState = GameState.Scores;
                         _scores = HighScoreManager.GetScores();
-                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
-                        quitButton = new Button("quit", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
-                        mouseIsHeld = true;
+                        _mainMenuButton = new Button("main menu", _font, new Vector2(_camera.Left + 210, 275), _fontColour, Color.White, _audioManager);
+                        _quitButton = new Button("quit", _font, new Vector2(_camera.Left + 210, 325), _fontColour, Color.White, _audioManager);
+                        _mouseIsHeld = true;
                     }
-                    if (quitButton.IsClicked && !mouseIsHeld)
+                    if (_quitButton.IsClicked && !_mouseIsHeld)
                     {
                         Exit();
                     }
                     break;
                     #endregion
+
+                #region Scores
                 case GameState.Scores:
-                    quitButton.Update(mouseState, Camera);
-                    mainMenuButton.Update(mouseState, Camera);
+                    _quitButton.Update(mouseState, _camera);
+                    _mainMenuButton.Update(mouseState, _camera);
 
-                    if (quitButton.IsClicked && !mouseIsHeld)
+                    if (_quitButton.IsClicked && !_mouseIsHeld)
                     {
                         Exit();
                     }
-                    else if (mainMenuButton.IsClicked && !mouseIsHeld)
+                    else if (_mainMenuButton.IsClicked && !_mouseIsHeld)
                     {
                         // Show main menu
                         Reset();
-                        currentGameState = GameState.MainMenu;
-                        mouseIsHeld = true;
-                        quitButton = null;
+                        _currentGameState = GameState.MainMenu;
+                        _mouseIsHeld = true;
+                        _quitButton = null;
                     }
                     break;
+                #endregion
 
-                case GameState.GameOver:
-                    #region gameover
-                    resetButton.Update(mouseState, Camera);
-                    mainMenuButton.Update(mouseState, Camera);
-                    if (resetButton.IsClicked)
-                    {
-                        Reset();
-                        _audioManager.PlaySong("background", true);
-
-                    }
-                    else if (mainMenuButton.IsClicked)
-                    {
-                        // Show main menu
-                        Reset();
-                        currentGameState = GameState.MainMenu;
-                        mouseIsHeld = true;
-                    }
-                    break;
-                    #endregion
-                case GameState.Paused:
-                    PauseCheck();
-                    break;
-
+                #region Playing
                 case GameState.Playing:
-                    #region playing
+
                     IsMouseVisible = false;
                     PauseCheck();
                     // if the game is paused then do not do any updates
@@ -223,53 +208,168 @@ namespace Jump
                     }
 
                     // Update the chunk manager
-                    ChunkManager.Update(Camera.Left, Camera.Right);
+                    _chunkManager.Update(_camera.Left, _camera.Right);
 
 
-                    CollisionReason reason = ChunkManager.CheckCollision(Player.BoundingBox);
+                    CollisionReason reason = _chunkManager.CheckCollision(_player.BoundingBox);
 
                     // if the reason is because of gravity then just move the player so they are above the chunk they collided with
                     if (reason == CollisionReason.Gravity)
                     {
-                        Player.IsGrounded = true;
-                        Player.Y = ChunkManager.LastIntersection.Y - Player.Height + 1;
+                        _player.IsGrounded = true;
+                        _player.Y = _chunkManager.LastIntersection.Y - _player.Height + 1;
                     }
                     // if the reason is that the player hit an obstacle or fell off a building then reset the game
-                    else if (reason == CollisionReason.HitObstacle || Player.Y > 700)
+                    else if (reason == CollisionReason.HitObstacle || _player.Y > 700)
                     {
-                        currentGameState = GameState.GameOver;
+                        _currentGameState = GameState.GameOver;
                         HighScoreManager.SaveScore(_score);
-                        resetButton = new Button("retry", _font, new Vector2(Camera.Left + 210, 275), FontColour, Color.White, _audioManager);
-                        mainMenuButton = new Button("main menu", _font, new Vector2(Camera.Left + 210, 325), FontColour, Color.White, _audioManager);
+                        _resetButton = new Button("retry", _font, new Vector2(_camera.Left + 210, 275), _fontColour, Color.White, _audioManager);
+                        _mainMenuButton = new Button("main menu", _font, new Vector2(_camera.Left + 210, 325), _fontColour, Color.White, _audioManager);
                         _audioManager.StopSong();
                         return;
                     }
                     // If the player hit a building then move them so they aren't intersecting the building and stop them travelling right
                     else if (reason == CollisionReason.HitBuilding)
                     {
-                        Player.X -= Player.Width;
-                        Player.VelocityX = 0;
-                        Player.IsGrounded = false;
+                        _player.X -= _player.Width;
+                        _player.VelocityX = 0;
+                        _player.IsGrounded = false;
                     }
                     // if there is no collision the player must be off the ground
                     else if (reason == CollisionReason.None)
                     {
-                        Player.IsGrounded = false;
+                        _player.IsGrounded = false;
                     }
 
-                    Player.Update(gameTime);
-                    Camera.Position = Player.Position;
+                    _player.Update(gameTime);
+                    _camera.Position = _player.Position;
 
-                    _score += (int)Player.VelocityX;
+                    _score += (int)_player.VelocityX;
 
 
                     base.Update(gameTime);
-                    #endregion
                     break;
+                #endregion
 
+                #region Paused
+                case GameState.Paused:
+                    PauseCheck();
+                    break;
+                #endregion
+
+                #region Game Over
+                case GameState.GameOver:
+                    _resetButton.Update(mouseState, _camera);
+                    _mainMenuButton.Update(mouseState, _camera);
+                    if (_resetButton.IsClicked)
+                    {
+                        Reset();
+                        _audioManager.PlaySong("background", true);
+
+                    }
+                    else if (_mainMenuButton.IsClicked)
+                    {
+                        // Show main menu
+                        Reset();
+                        _currentGameState = GameState.MainMenu;
+                        _mouseIsHeld = true;
+                    }
+                    break;
+                #endregion
             }
 
         }
+
+        /// <summary>
+        /// This is called when the game should draw itself.
+        /// </summary>
+        /// <param name="gameTime">Provides a snapshot of timing values.</param>
+        protected override void Draw(GameTime gameTime)
+        {
+            // Clear the background
+            GraphicsDevice.Clear(new Color(58, 159, 229));
+
+            // Draw the game components in relation to the camera
+            _spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
+
+            switch (_currentGameState)
+            {
+                #region Main Menu
+                case GameState.MainMenu:
+                    DrawTitle("jump");
+                    _playerButton.Draw(_spriteBatch);
+                    _scoresButton.Draw(_spriteBatch);
+                    if (_quitButton != null)
+                    {
+                        _quitButton.Draw(_spriteBatch);
+                    }
+
+                    // Draw controls
+                    _spriteBatch.DrawString(_font, "spacebar = jump", new Vector2(_camera.Left + 515, 275), _fontColour, 0,
+                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
+                    _spriteBatch.DrawString(_font, "p = pause / resume", new Vector2(_camera.Left + 500, 325), _fontColour, 0,
+                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
+                    break;
+                #endregion
+
+                #region Scores
+                case GameState.Scores:
+                    DrawTitle("scores");
+                    _mainMenuButton.Draw(_spriteBatch);
+                    _quitButton.Draw(_spriteBatch);
+                    _spriteBatch.DrawString(_font, "#1: " + (_scores.Count > 0 ? _scores[0].ToString() : "-"), new Vector2(_camera.Left + 500, 275), _fontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    _spriteBatch.DrawString(_font, "#2: " + (_scores.Count > 1 ? _scores[1].ToString() : "-"), new Vector2(_camera.Left + 500, 325), _fontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    _spriteBatch.DrawString(_font, "#3: " + (_scores.Count > 2 ? _scores[2].ToString() : "-"), new Vector2(_camera.Left + 500, 375), _fontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    _spriteBatch.DrawString(_font, "#4: " + (_scores.Count > 3 ? _scores[3].ToString() : "-"), new Vector2(_camera.Left + 700, 275), _fontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    _spriteBatch.DrawString(_font, "#5: " + (_scores.Count > 4 ? _scores[4].ToString() : "-"), new Vector2(_camera.Left + 700, 325), _fontColour, 0,
+                        Vector2.Zero, 1f, SpriteEffects.None, 0);
+                    break;
+                #endregion
+
+                #region Playing
+                case GameState.Playing:
+                    _spriteBatch.DrawString(_font, "score : " + _score, new Vector2(_camera.Left + 10, 130), _fontColour, 0,
+                        Vector2.Zero, 0.85f, SpriteEffects.None, 0);
+                    _player.Draw(_spriteBatch);
+                    break;
+                #endregion
+
+                #region Paused
+                case GameState.Paused:
+                    DrawTitle("paused");
+                    _spriteBatch.DrawString(_font, "score : " + _score, new Vector2(_camera.Left + 10, 130), _fontColour, 0,
+                        Vector2.Zero, 0.85f, SpriteEffects.None, 0);
+                    _player.Draw(_spriteBatch);
+                    break;
+                #endregion
+
+                #region Game Over
+                case GameState.GameOver:
+                    _resetButton.Draw(_spriteBatch);
+                    _mainMenuButton.Draw(_spriteBatch);
+                    DrawTitle("game over");
+                    _spriteBatch.DrawString(_font, "you scored:", new Vector2(_camera.Left + 600, 275), _fontColour);
+                    _spriteBatch.DrawString(_font, _score.ToString(), new Vector2(_camera.Left + 600, 325), _fontColour);
+                    _player.Draw(_spriteBatch);
+                    break;
+                #endregion
+            }
+
+            // Draw chunks
+            _chunkManager.Draw(_spriteBatch);
+            _spriteBatch.End();
+
+            base.Draw(gameTime);
+        }
+
+        #endregion
+
+        #region Private Methods
 
         private void PauseCheck()
         {
@@ -280,7 +380,7 @@ namespace Jump
             {
                 _isHoldingDownP = true;
                 _gameIsPaused = !_gameIsPaused;
-                currentGameState = _gameIsPaused ? GameState.Paused : GameState.Playing;
+                _currentGameState = _gameIsPaused ? GameState.Paused : GameState.Playing;
 
                 if (_audioManager.IsSongPlaying && _gameIsPaused)
                 {
@@ -298,98 +398,29 @@ namespace Jump
             }
         }
 
-
-
-        public void Reset()
+        private void Reset()
         {
             // Reset all of the game components and variables
             if (_audioManager.IsSongPlaying)
             {
                 _audioManager.StopSong();
             }
-            
+
             _score = 0;
 
-            Player.Reset();
-            ChunkManager.Reset();
-            Camera.Reset();
-            Camera.Position = Player.Position;
-            currentGameState = GameState.Playing;
+            _player.Reset();
+            _chunkManager.Reset();
+            _camera.Reset();
+            _camera.Position = _player.Position;
+            _currentGameState = GameState.Playing;
         }
 
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
+        private void DrawTitle(string text)
         {
-            GraphicsDevice.Clear(new Color(58, 159, 229));
-
-            // Draw the game components in relation to the camera
-            spriteBatch.Begin(SpriteSortMode.Deferred, null, null, null, null, null, Camera.ViewMatrix);
-
-            switch (currentGameState)
-            {
-                case GameState.MainMenu:
-                    DrawTitle("jump");
-                    playerButton.Draw(spriteBatch);
-                    scoresButton.Draw(spriteBatch);
-                    if (quitButton != null)
-                    {
-                        quitButton.Draw(spriteBatch);
-                    }
-                    spriteBatch.DrawString(_font, "spacebar = jump", new Vector2(Camera.Left + 515, 275), FontColour, 0,
-                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
-                    spriteBatch.DrawString(_font, "p = pause / resume", new Vector2(Camera.Left + 500, 325), FontColour, 0,
-                        Vector2.Zero, 0.9f, SpriteEffects.None, 0);
-                    break;
-                case GameState.Scores:
-                    DrawTitle("scores");
-                    mainMenuButton.Draw(spriteBatch);
-                    quitButton.Draw(spriteBatch);
-                    spriteBatch.DrawString(_font, "#1: " + (_scores.Count > 0 ? _scores[0].ToString() : "-"), new Vector2(Camera.Left + 500, 275), FontColour, 0,
-                        Vector2.Zero, 1f, SpriteEffects.None, 0);
-                    spriteBatch.DrawString(_font, "#2: " + (_scores.Count > 1 ? _scores[1].ToString() : "-"), new Vector2(Camera.Left + 500, 325), FontColour, 0,
-                        Vector2.Zero, 1f, SpriteEffects.None, 0);
-                    spriteBatch.DrawString(_font, "#3: " + (_scores.Count > 2 ? _scores[2].ToString() : "-"), new Vector2(Camera.Left + 500, 375), FontColour, 0,
-                        Vector2.Zero, 1f, SpriteEffects.None, 0);
-                    spriteBatch.DrawString(_font, "#4: " + (_scores.Count > 3 ? _scores[3].ToString() : "-"), new Vector2(Camera.Left + 700, 275), FontColour, 0,
-                        Vector2.Zero, 1f, SpriteEffects.None, 0);
-                    spriteBatch.DrawString(_font, "#5: " + (_scores.Count > 4 ? _scores[4].ToString() : "-"), new Vector2(Camera.Left + 700, 325), FontColour, 0,
-                        Vector2.Zero, 1f, SpriteEffects.None, 0);
-                    break;
-                case GameState.GameOver:
-                    resetButton.Draw(spriteBatch);
-                    mainMenuButton.Draw(spriteBatch);
-                    DrawTitle("game over");
-                    spriteBatch.DrawString(_font, "you scored:", new Vector2(Camera.Left + 600, 275), FontColour);
-                    spriteBatch.DrawString(_font, _score.ToString(), new Vector2(Camera.Left + 600, 325), FontColour);
-                    Player.Draw(spriteBatch);
-                    break;
-                case GameState.Paused:
-                    DrawTitle("paused");
-                    spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
-                        Vector2.Zero, 0.85f, SpriteEffects.None, 0);
-                    Player.Draw(spriteBatch);
-                    break;
-                case GameState.Playing:
-                    spriteBatch.DrawString(_font, "score : " + _score, new Vector2(Camera.Left + 10, 130), FontColour, 0,
-                        Vector2.Zero, 0.85f, SpriteEffects.None, 0);
-                    Player.Draw(spriteBatch);
-                    break;
-            }
-
-            ChunkManager.Draw(spriteBatch);
-            spriteBatch.End();
-
-            base.Draw(gameTime);
-        }
-
-        public void DrawTitle(string text)
-        {
-            spriteBatch.DrawString(_font, text, new Vector2(Camera.Left + 350, 150), FontColour, 0,
+            _spriteBatch.DrawString(_font, text, new Vector2(_camera.Left + 350, 150), _fontColour, 0,
                 Vector2.Zero, 2f, SpriteEffects.None, 0);
         }
 
+        #endregion
     }
 }
