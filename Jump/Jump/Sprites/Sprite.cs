@@ -8,12 +8,17 @@ namespace Jump.Sprites
 {
     public abstract class Sprite
     {
-        public Texture2D Texture { get; private set; }
+        #region Protected / Private Properties
+
         protected int TextureWidth { get; set; }
         protected int TextureHeight { get; set; }
+        protected Rectangle SourceRectangle;
 
-        // Todo change x and y to be parameter driven
-        protected Rectangle SourceRectangle; 
+        private string _assetName;
+
+        #endregion
+
+        #region Public Properties
 
         /// <summary>
         /// The position on screen of the sprite
@@ -45,11 +50,11 @@ namespace Jump.Sprites
         /// </summary>
         public Rectangle BoundingBox { get { return new Rectangle((int)X, (int)Y, Width, Height); } }
 
+        public Texture2D Texture { get; private set; }
         public float Rotation { get; set; }
         public Vector2 Origin { get; set; }
         public float Scale { get; set; }
         public float LayerDepth { get; set; }
-
         public bool Hidden { get; set; }
 
         /// <summary>
@@ -60,7 +65,9 @@ namespace Jump.Sprites
             get { return new Rectangle((int)Position.X, (int)Position.Y, TextureWidth, TextureHeight);}
         }
 
-        private string _assetName;
+        #endregion
+
+        #region Constructor
 
         public Sprite(string assetName, Vector2 position, int width, int height)
         {
@@ -71,6 +78,10 @@ namespace Jump.Sprites
             Width = width;
             Height = height;
         }
+
+        #endregion
+
+        #region Public Virtual Methods
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
@@ -105,5 +116,6 @@ namespace Jump.Sprites
 
         }
 
+        #endregion
     }
 }

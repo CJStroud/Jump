@@ -14,17 +14,25 @@ namespace Jump.Sprites
 
         #endregion
 
+        #region Public Properties
+
         public bool IsGrounded { get; set; }
         public Vector2 Velocity { get; private set; }
         public float VelocityX { get { return Velocity.X; } set { Velocity = new Vector2(value, Velocity.Y); } }
         public float VelocityY { get { return Velocity.Y; } set { Velocity = new Vector2(Velocity.X, value); } }
-
         public float MaxSpeed = 5.0f;
         public float JumpSpeed = 6.0f;
 
-        private Vector2 _startingPosition;
+        #endregion
 
+        #region Private Fields
+
+        private Vector2 _startingPosition;
         private AudioManager _audioManager;
+
+        #endregion
+
+        #region Constructors
 
         public Player(string assetName, Vector2 position, int width, int height, int textureWidth, int textureHeight) 
             : base(assetName, position, width, height)
@@ -42,6 +50,10 @@ namespace Jump.Sprites
             TimePerFrame = timePerFrame;
         }
 
+        #endregion
+
+        #region Public Methods
+
         public void Intialise(AudioManager audioManager)
         {
             _audioManager = audioManager;
@@ -50,6 +62,7 @@ namespace Jump.Sprites
         public override void Update(GameTime gameTime)
         {
             float elapsed = (float)gameTime.ElapsedGameTime.TotalSeconds;
+            KeyboardState keyboard = Keyboard.GetState();
 
             #region Animation
 
@@ -74,9 +87,6 @@ namespace Jump.Sprites
 
 
             #endregion
-
-
-            KeyboardState keyboard = Keyboard.GetState();
 
             #region Jumping Logic
 
@@ -116,11 +126,16 @@ namespace Jump.Sprites
             base.Update(gameTime);
         }
 
+        /// <summary>
+        /// Reset the player variables
+        /// </summary>
         public void Reset()
         {
             Velocity = Vector2.Zero;
             Position = _startingPosition;
             IsGrounded = false;
         }
+
+        #endregion
     }
 }
