@@ -69,8 +69,8 @@ namespace Jump
             
             HighScoreManager.Initialise();
             _audioManager = new AudioManager(this);
-            _audioManager.MusicVolume = 0.2f;
-            _audioManager.SoundEffectVolume = 0.4f;
+            _audioManager.MusicVolume = 0.05f;
+            _audioManager.SoundEffectVolume = 0.2f;
             Components.Add(_audioManager);
 
             Player.Intialise(_audioManager);
