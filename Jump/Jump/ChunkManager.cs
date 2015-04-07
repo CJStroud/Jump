@@ -222,6 +222,12 @@ namespace Jump
                     minimumTranslationDistance.X = Math.Abs(left) < right ? left : right;
                     minimumTranslationDistance.Y = Math.Abs(top) < bottom ? top : bottom;
 
+                    // 0 the larger axis
+                    if (Math.Abs(minimumTranslationDistance.X) < Math.Abs(minimumTranslationDistance.Y))
+                        minimumTranslationDistance.Y = 0;
+                    else
+                        minimumTranslationDistance.X = 0;
+
                     #endregion
 
                     // if Y is bigger than x then the player has intersected from the top of the chunk
