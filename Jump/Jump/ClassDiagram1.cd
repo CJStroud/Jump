@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Jump.AudioManager" Collapsed="true">
+    <Position X="12" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAABABABAAIAAAAABMAAEABAoAAIABGhDAU=</HashCode>
+      <FileName>Audio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Camera" Collapsed="true">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAEAAAAAAEBAAgAAAAAAAAAAIIAAAACBCAgAAAAgA=</HashCode>
+      <FileName>Camera.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.ChunkManager" Collapsed="true">
+    <Position X="12" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACQAAEAABGAABgABARAAAAIIEAAAABCAGgCIAAAAgAQ=</HashCode>
+      <FileName>ChunkManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.HighScoreManager" Collapsed="true">
+    <Position X="13.75" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIAAAAAQAAAAAAAAAAAAAAAAAAAABAgAAAAAA=</HashCode>
+      <FileName>HighScoreManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Jump" Collapsed="true">
+    <Position X="15.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQCEEAACAEAJwAEAAAABACEAQCAAAwAAAIAAYCAgAc=</HashCode>
+      <FileName>Jump.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Program" Collapsed="true">
+    <Position X="12" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAA=</HashCode>
+      <FileName>Program.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.GUI.Button" Collapsed="true">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAADQAAAgAgoAAAAMAAACAAAAAIAAAACAACgAA=</HashCode>
+      <FileName>GUI\Button.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Chunks.Chunk" Collapsed="true">
+    <Position X="0.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAUAAAAAQ=</HashCode>
+      <FileName>Sprites\Chunks\Chunk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Chunks.HoleChunk" Collapsed="true">
+    <Position X="0.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Chunks\HoleChunk.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Obstacles.Antenna" Collapsed="true">
+    <Position X="7.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Obstacles\Antenna.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Obstacles.Obstacle" Collapsed="true">
+    <Position X="7.25" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Obstacles\Obstacle.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Obstacles.RoofDoor" Collapsed="true">
+    <Position X="9.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Obstacles\RoofDoor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Obstacles.Fan" Collapsed="true">
+    <Position X="5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAAAAAgAAEAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Sprites\Obstacles\Fan.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Jump.Sprites.Player" Collapsed="true">
+    <Position X="2.75" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAYAAAABAAAABAAAAAAEAAIBAAAAAAAAAAAACEAEgAE=</HashCode>
+      <FileName>Sprites\Player.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Jump.Sprites.Sprite" Collapsed="true">
+    <Position X="5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>BAQAAAAABAAAAoSgAAIAAEAAAKAABAAEAAIAAAgEYAQ=</HashCode>
+      <FileName>Sprites\Sprite.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="Jump.IAnimated" Collapsed="true">
+    <Position X="12" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAEAAAAE=</HashCode>
+      <FileName>IAnimated.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Enum Name="Jump.CollisionReason" Collapsed="true">
+    <Position X="12" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIEAAAAAAAAAAAAAAAgAAAAAAAAAEAAAA=</HashCode>
+      <FileName>CollisionReason.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Jump.GameState" Collapsed="true">
+    <Position X="13.75" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAggAAAAAAAAAgAAAAAAAAYAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>GameState.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
