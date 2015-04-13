@@ -31,7 +31,7 @@ namespace Jump
                 }
                 else
                 {
-                    _holeSpawnChance = (int) (value*100);
+                    _holeSpawnChance = (int)(value * 100);
                 }
             }
         }
@@ -54,15 +54,15 @@ namespace Jump
                 }
                 else
                 {
-                    _obstacleSpawnChance = (int) (value*100);
+                    _obstacleSpawnChance = (int)(value * 100);
                 }
             }
         }
-        
+
         /// <summary>
         /// The current chunks the manager is dealing with
         /// </summary>
-        public List<Chunk> Chunks;
+        public Queue<Chunk> Chunks;
 
         /// <summary>
         /// The right side of the chunk that is furthest right
@@ -90,7 +90,7 @@ namespace Jump
         private int _screenWidth;
         private int _nextPostionX;
         private int _defaultChunkWidth = 150;
-        private int _defaultChunkHeight = 500;     
+        private int _defaultChunkHeight = 500;
         private ContentManager _content;
         private AudioManager _audioManager;
         private Rectangle _startingViewport;
@@ -107,7 +107,7 @@ namespace Jump
 
         public ChunkManager(Rectangle viewport)
         {
-            Chunks = new List<Chunk>();
+            Chunks = new Queue<Chunk>();
             _screenWidth = viewport.Width;
             _startingViewport = viewport;
         }
@@ -135,11 +135,11 @@ namespace Jump
             // check if the first chunk is outside of the screen, if it is then destroy it
             if (Chunks.Count > 0)
             {
-                bool firstChunkIsOutsideScreen = Chunks[0].DestinationRectangle.Right < leftOfScreen;
+                bool firstChunkIsOutsideScreen = Chunks.Peek().DestinationRectangle.Right < leftOfScreen;
 
                 if (firstChunkIsOutsideScreen)
                 {
-                    DestroyChunkAt(0);
+                    DestroyChunk();
                     GenerateRandomChunk();
                 }
             }
@@ -172,7 +172,7 @@ namespace Jump
             Right = chunk.BoundingBox.Right;
 
             // Add chunk
-            Chunks.Add(chunk);
+            Chunks.Enqueue(chunk);
         }
 
         public CollisionReason CheckCollision(Rectangle playerBoundingBox)
@@ -217,7 +217,7 @@ namespace Jump
                     float top = (chunkMin.Y - playerMax.Y);
                     float bottom = (chunkMax.Y - playerMin.Y);
 
-                    
+
                     // work out min translation distance on x and y
                     minimumTranslationDistance.X = Math.Abs(left) < right ? left : right;
                     minimumTranslationDistance.Y = Math.Abs(top) < bottom ? top : bottom;
@@ -289,7 +289,7 @@ namespace Jump
                 isHole = random.Next(1, 100) < _holeSpawnChance;
             }
 
-                // Generate a new chunk and add it to the list
+            // Generate a new chunk and add it to the list
             if (isHole)
             {
                 chunk = new HoleChunk("Building", new Vector2(_nextPostionX, _chunkY), _defaultChunkWidth,
@@ -304,7 +304,7 @@ namespace Jump
                 if (lastChunk is HoleChunk)
                 {
                     int i = random.Next(3);
-                    _chunkY = 475 + (i*25);
+                    _chunkY = 475 + (i * 25);
                 }
 
                 chunk = new Chunk("Building", new Vector2(_nextPostionX, _chunkY), _defaultChunkWidth,
@@ -323,15 +323,15 @@ namespace Jump
                     switch (i)
                     {
                         case 0:
-                            chunk.Obstacle = new RoofDoor(new Vector2(_nextPostionX + chunk.Width/2, chunk.Y));
+                            chunk.Obstacle = new RoofDoor(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
                             break;
 
                         case 1:
-                            chunk.Obstacle = new Antenna(new Vector2(_nextPostionX + chunk.Width/2, chunk.Y));
+                            chunk.Obstacle = new Antenna(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
                             break;
 
                         case 2:
-                            chunk.Obstacle = new Fan(new Vector2(_nextPostionX + chunk.Width/2, chunk.Y));
+                            chunk.Obstacle = new Fan(new Vector2(_nextPostionX + chunk.Width / 2, chunk.Y));
                             break;
 
                     }
@@ -349,18 +349,18 @@ namespace Jump
 
         private void GenerateStart()
         {
-            while (_startingViewport.Right + _defaultChunkWidth*2 > Right)
+            while (_startingViewport.Right + _defaultChunkWidth > Right - _defaultChunkWidth)
             {
                 GenerateNormalChunk();
-            } 
+            }
         }
 
-        private void DestroyChunkAt(int index)
+        private void DestroyChunk()
         {
             // Try and remove the chunk at the specified index
-            if (Chunks != null && Chunks.Count-1 >= index)
+            if (Chunks != null && Chunks.Count > 0)
             {
-                Chunks.RemoveAt(index);
+                Chunks.Dequeue();
                 Left = Chunks.First().BoundingBox.Left;
             }
         }
@@ -368,3 +368,5 @@ namespace Jump
         #endregion
     }
 }
+
+
