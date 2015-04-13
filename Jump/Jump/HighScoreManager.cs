@@ -53,8 +53,8 @@ namespace Jump
             
             // Add score to current scores and sort the list.
             scores.Add(score);
-            scores.Sort();
-            scores.Reverse();
+
+            scores.SortDescending();
 
             // write back the scores, if there is more than 5 then ignore them
             using (StreamWriter writer = new StreamWriter(_filePath))
@@ -83,5 +83,6 @@ namespace Jump
 
             return intScores;
         }
+
     }
 }

@@ -75,6 +75,7 @@
     <Compile Include="Audio.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CollisionReason.cs" />
+    <Compile Include="ExtensionMethods.cs" />
     <Compile Include="GameState.cs" />
     <Compile Include="HighScoreManager.cs" />
     <Compile Include="Sprites\Chunks\Chunk.cs" />
