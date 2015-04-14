@@ -62,7 +62,7 @@ namespace Jump
         /// <summary>
         /// The current chunks the manager is dealing with
         /// </summary>
-        public List<Chunk> Chunks;
+        public Queue<Chunk> Chunks;
 
         /// <summary>
         /// The right side of the chunk that is furthest right
@@ -107,7 +107,7 @@ namespace Jump
 
         public ChunkManager(Rectangle viewport)
         {
-            Chunks = new List<Chunk>();
+            Chunks = new Queue<Chunk>();
             _screenWidth = viewport.Width;
             _startingViewport = viewport;
         }
@@ -135,11 +135,11 @@ namespace Jump
             // check if the first chunk is outside of the screen, if it is then destroy it
             if (Chunks.Count > 0)
             {
-                bool firstChunkIsOutsideScreen = Chunks[0].DestinationRectangle.Right < leftOfScreen;
+                bool firstChunkIsOutsideScreen = Chunks.Peek().DestinationRectangle.Right < leftOfScreen;
 
                 if (firstChunkIsOutsideScreen)
                 {
-                    DestroyChunkAt(0);
+                    DestroyChunk();
                     GenerateRandomChunk();
                 }
             }
@@ -172,7 +172,7 @@ namespace Jump
             Right = chunk.BoundingBox.Right;
 
             // Add chunk
-            Chunks.Add(chunk);
+            Chunks.Enqueue(chunk);
         }
 
         public CollisionReason CheckCollision(Rectangle playerBoundingBox)
@@ -349,18 +349,18 @@ namespace Jump
 
         private void GenerateStart()
         {
-            while (_startingViewport.Right + _defaultChunkWidth*2 > Right)
+             while (_startingViewport.Right + _defaultChunkWidth > Right + _defaultChunkWidth)
             {
                 GenerateNormalChunk();
             } 
         }
 
-        private void DestroyChunkAt(int index)
+        private void DestroyChunk()
         {
             // Try and remove the chunk at the specified index
-            if (Chunks != null && Chunks.Count-1 >= index)
+            if (Chunks != null && Chunks.Count > 0)
             {
-                Chunks.RemoveAt(index);
+                Chunks.Dequeue();
                 Left = Chunks.First().BoundingBox.Left;
             }
         }
